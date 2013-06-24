@@ -1,0 +1,46 @@
+#!/bin/bash
+
+if [[ ! -f ~/.textiosrc ]]
+then
+	echo 'Cannot read ~/.textiosrc' >&2
+	exit 1
+fi
+
+. ~/.textiosrc
+
+filters='CRITICAL UNKNOWN'
+while getopts aw name
+do
+	case $name in
+		a)
+			filters=
+			;;
+		w)
+			filters='WARNING CRITICAL UNKNOWN'
+			;;
+	esac
+done
+
+rm /tmp/textios-*
+
+for (( i = 0; i < "${#monitors[@]}"; i += 3 ))
+do
+	echo Fetching $i...
+	case ${monitors[$i]} in
+		icinga)
+			curl -nsLk "${monitors[$((i + 1))]}" |
+				sed 1d | textios-csv_to_editable $filters >/tmp/textios-$i
+			;;
+		nagios)
+			curl -nsLk "${monitors[$((i + 1))]}" | textios-nagios_to_csv |
+				sed 1d | textios-csv_to_editable $filters >/tmp/textios-$i
+			;;
+	esac
+done
+
+vim -p /tmp/textios-*
+
+for (( i = 0; i < "${#monitors[@]}"; i += 3 ))
+do
+	textios-process_editable "${monitors[$((i + 2))]}" </tmp/textios-$i
+done

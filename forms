@@ -1,0 +1,74 @@
+icinga
+
+ack service:
+
+<form method='post' action='cmd.cgi'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_typ' VALUE='34'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_mod' VALUE='2'>
+	<INPUT TYPE='HIDDEN' NAME='host' VALUE='whatever.hostname'>
+	<INPUT TYPE='HIDDEN' NAME='service' VALUE='FANS'>
+	<INPUT TYPE='HIDDEN' NAME='com_author' VALUE='my.username'>
+
+	<INPUT TYPE='checkbox' NAME='persistent' >
+	<INPUT TYPE='checkbox' ID='expire_checkbox' NAME='use_ack_end_time'>
+	<INPUT TYPE='TEXT' NAME='end_time' VALUE='2013-06-23 18:28:01' SIZE="25">
+	<INPUT TYPE='checkbox' NAME='sticky_ack' CHECKED>
+	<INPUT TYPE='checkbox' NAME='send_notification' CHECKED>
+	<INPUT TYPE="submit" NAME="btnSubmit" VALUE="Commit" class="">
+</form>
+
+
+host downtime:
+
+<form method='post' action='cmd.cgi'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_typ' VALUE='55'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_mod' VALUE='2'>
+	<INPUT TYPE='HIDDEN' NAME='host' VALUE='whatever.hostname'>
+	<INPUT TYPE='HIDDEN' NAME='com_author' VALUE='my.username'>
+	<INPUT TYPE='TEXT' NAME='start_time' VALUE='2013-06-22 18:50:23' SIZE="25">
+	<INPUT TYPE='TEXT' NAME='end_time' VALUE='2013-06-22 20:50:23' SIZE="25">
+	<INPUT TYPE='TEXT' NAME='hours' VALUE='2' SIZE=2 MAXLENGTH=2>
+	<INPUT TYPE='TEXT' NAME='minutes' VALUE='0' SIZE=2 MAXLENGTH=2>
+	<INPUT TYPE="submit" NAME="btnSubmit" VALUE="Commit">
+</form>
+
+
+service downtime:
+
+<form method='post' action='cmd.cgi'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_typ' VALUE='56'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_mod' VALUE='2'>
+	<INPUT TYPE='HIDDEN' NAME='host' VALUE='whatever.hostname'>
+	<INPUT TYPE='HIDDEN' NAME='service' VALUE='FANS'>
+	<INPUT TYPE='HIDDEN' NAME='com_author' VALUE='my.username'>
+	<INPUT TYPE='TEXT' NAME='start_time' VALUE='2013-06-22 18:50:16' SIZE="25">
+	<INPUT TYPE='TEXT' NAME='end_time' VALUE='2013-06-22 20:50:16' SIZE="25">
+	<INPUT TYPE='TEXT' NAME='hours' VALUE='2' SIZE=2 MAXLENGTH=2>
+	<INPUT TYPE='TEXT' NAME='minutes' VALUE='0' SIZE=2 MAXLENGTH=2>
+	<INPUT TYPE="submit" NAME="btnSubmit" VALUE="Commit">
+</form>
+
+
+
+-------------
+
+
+nagios
+
+ack service:
+
+<form method='post' action='cmd.cgi'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_typ' VALUE='34'>
+	<INPUT TYPE='HIDDEN' NAME='cmd_mod' VALUE='2'>
+	<INPUT TYPE='TEXT' NAME='host' VALUE='whatever.hostname'>
+	<INPUT TYPE='TEXT' NAME='service' VALUE='RAM_NRPE'>
+	<INPUT TYPE='checkbox' NAME='sticky_ack' CHECKED>
+	<INPUT TYPE='checkbox' NAME='send_notification' CHECKED>
+	<INPUT TYPE='checkbox' NAME='persistent' CHECKED>
+	<INPUT TYPE='TEXT' NAME='com_author' VALUE='my.username'>
+	<INPUT TYPE='TEXT' NAME='com_data' VALUE='' SIZE=40>
+	<INPUT TYPE='submit' NAME='btnSubmit' VALUE='Commit'>
+	<INPUT TYPE='reset' VALUE='Reset'></td></tr>
+</form>
+
+rest sieht auch gleich aus

@@ -1,0 +1,34 @@
+#!/usr/bin/env python2
+# coding: utf-8
+
+import csv
+import sys
+
+filter_states = []
+if len(sys.argv) >= 2:
+    filter_states = sys.argv[1:]
+
+buffered = []
+buffered_lens = {}
+reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
+for row in reader:
+    if len(filter_states) != 0 and not row[2] in filter_states:
+        continue
+
+    buffered.append(row)
+    for i in range(len(row)):
+        if i in buffered_lens:
+            buffered_lens[i] = max(buffered_lens[i], len(row[i]))
+        else:
+            buffered_lens[i] = len(row[i])
+
+for row in buffered:
+    # nbsp:
+    print ' ',
+    for i in [0, 1, 2, 6]:
+        # nbsp am Ende:
+        fmt = '%-' + str(buffered_lens[i]) + 's '
+        print fmt % row[i],
+    print
+
+# vim: set et sta ts=4 sw=4 :

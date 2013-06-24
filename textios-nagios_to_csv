@@ -1,0 +1,58 @@
+#!/usr/bin/awk -f
+
+BEGIN {
+	FS = "="
+	print "'Host';'Service';'Status';'_';'_';'_';'Status_Information'"
+}
+
+/^host/ {
+	service_description = "HOST"
+}
+
+/^\thost_name/ {
+	host_name = $2
+}
+
+/^\tservice_description/ {
+	service_description = $2
+}
+
+/^\tcurrent_state/ {
+	switch ($2) {
+		case 0:
+			current_state = "OK"
+			break
+		case 1:
+			current_state = "WARNING"
+			break
+		case 2:
+			current_state = "CRITICAL"
+			break
+		case 3:
+			current_state = "UNKNOWN"
+			break
+	}
+}
+
+/^\tplugin_output/ {
+	plugin_output = substr($0, index($0, "=") + 1)
+}
+
+/^\tscheduled_downtime_depth/ {
+	if ($2 != 0) {
+		host_name = ""
+	}
+}
+
+/^\tproblem_has_been_acknowledged=1/ {
+	if ($2 != 0) {
+		host_name = ""
+	}
+}
+
+/^\t}/ {
+	if (host_name != "") {
+		print "'" host_name "';'" service_description "';'" \
+			  current_state "';'_';'_';'_';'" plugin_output "'"
+	}
+}
