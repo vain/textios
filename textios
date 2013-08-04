@@ -21,7 +21,7 @@ do
 	esac
 done
 
-rm /tmp/textios-*
+rm -f /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 3 ))
 do
