@@ -23,24 +23,30 @@ done
 
 rm -f /tmp/textios-*
 
-for (( i = 0; i < "${#monitors[@]}"; i += 3 ))
+for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
-	echo Fetching $i...
-	case ${monitors[$i]} in
+	printf -v suff '%02d-%s' $i ${monitors[$i]}
+	echo Fetching $suff...
+	case ${monitors[$((i + 1))]} in
 		icinga)
-			curl -nsLk "${monitors[$((i + 1))]}" |
-				sed 1d | textios-csv_to_editable $filters >/tmp/textios-$i
+			curl -nsLk "${monitors[$((i + 2))]}" |
+				sed 1d | textios-csv_to_editable $filters \
+					>/tmp/textios-$suff
 			;;
 		nagios)
-			curl -nsLk "${monitors[$((i + 1))]}" | textios-nagios_to_csv |
-				sed 1d | textios-csv_to_editable $filters >/tmp/textios-$i
+			curl -nsLk "${monitors[$((i + 2))]}" | textios-nagios_to_csv |
+				sed 1d | textios-csv_to_editable $filters \
+					>/tmp/textios-$suff
 			;;
 	esac
 done
 
 vim -p /tmp/textios-*
 
-for (( i = 0; i < "${#monitors[@]}"; i += 3 ))
+for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
-	textios-process_editable "${monitors[$((i + 2))]}" </tmp/textios-$i
+	printf -v suff '%02d-%s' $i ${monitors[$i]}
+	echo Processing $suff...
+	textios-process_editable "${monitors[$((i + 3))]}" \
+		</tmp/textios-$suff
 done
