@@ -41,7 +41,7 @@ do
 	esac
 done
 
-vim -p /tmp/textios-*
+vim -o /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
