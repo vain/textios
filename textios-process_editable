@@ -4,6 +4,10 @@
 import sys
 import re
 import datetime
+import subprocess
+import getpass
+
+url = sys.argv[1]
 
 for line in sys.stdin.readlines():
     # An nbsp auftrennen:
@@ -19,9 +23,20 @@ for line in sys.stdin.readlines():
     m = re.search(r'^ack( (.*))?', cmd, re.I)
     if m:
         comment = m.group(2) or 'Acknowledged'
-
-        # TODO: ack host, service, comment
-        print host, service, comment
+        print 'ack {} on {}'.format(service, host)
+        curlcmd = ['curl', '-nsLk', '--fail', url,
+                   '--data', 'cmd_typ=34',
+                   '--data', 'cmd_mod=2',
+                   '--data', 'com_author={}'.format(getpass.getuser()),
+                   '--data', 'host={}'.format(host),
+                   '--data', 'service={}'.format(service),
+                   '--data', 'com_data={}'.format(comment),
+                   '--data', 'sticky_ack=1',
+                   '--data', 'send_notification=1',
+                   '--data', 'persistent=1']
+        with open('/dev/null', 'w') as fp:
+            if subprocess.call(curlcmd, stdout=fp) != 0:
+                sys.stderr.write('ACK {} {} failed'.format(host, service))
 
     # Erlaubt:
     #
@@ -58,10 +73,37 @@ for line in sys.stdin.readlines():
             time = m.group(4) + ':00'
 
         comment = m.group(5) or 'Scheduled Downtime'
+        starttime = datetime.datetime.now().strftime('%F %T')
 
-        # TODO: down date, time, comment
         if host_downtime:
-            print "*",
-        print host, service, date, time, comment
+            print 'host downtime for {}'.format(host)
+            curlcmd = [
+                       'curl', '-nsLk', '--fail', url,
+                       '--data', 'cmd_typ=55',
+                       '--data', 'cmd_mod=2',
+                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'host={}'.format(host),
+                       '--data', 'com_data={}'.format(comment),
+                       '--data', 'start_time={}'.format(starttime),
+                       '--data', 'end_time={} {}'.format(date, time),
+                       '--data', 'fixed=1',
+                      ]
+        else:
+            print 'service downtime for {} on {}'.format(service, host)
+            curlcmd = [
+                       'curl', '-nsLk', '--fail', url,
+                       '--data', 'cmd_typ=56',
+                       '--data', 'cmd_mod=2',
+                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'host={}'.format(host),
+                       '--data', 'service={}'.format(service),
+                       '--data', 'com_data={}'.format(comment),
+                       '--data', 'start_time={}'.format(starttime),
+                       '--data', 'end_time={} {}'.format(date, time),
+                       '--data', 'fixed=1',
+                      ]
+        with open('/dev/null', 'w') as fp:
+            if subprocess.call(curlcmd, stdout=fp) != 0:
+                sys.stderr.write('DOWN {} {} failed'.format(host, service))
 
 # vim: set et sta ts=4 sw=4 :
