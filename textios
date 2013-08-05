@@ -20,11 +20,15 @@ do
 			;;
 	esac
 done
+shift $((OPTIND - 1))
+labels=" $1 "
 
 rm -f /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
+	[[ "$labels" != "  " ]] && \
+		[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
 	printf -v suff '%02d-%s' $i ${monitors[$i]}
 	echo Fetching $suff...
 	case ${monitors[$((i + 1))]} in
@@ -45,6 +49,8 @@ vim -o /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
+	[[ "$labels" != "  " ]] && \
+		[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
 	printf -v suff '%02d-%s' $i ${monitors[$i]}
 	echo Processing $suff...
 	textios-process_editable "${monitors[$((i + 3))]}" \
