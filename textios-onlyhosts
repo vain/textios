@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Split at nsbp, sort can't do that by itself.
+awk -F' ' '{ print " " $2 " " }' | sort | uniq
