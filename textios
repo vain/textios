@@ -37,13 +37,14 @@ do
 	echo Fetching $suff...
 	case ${monitors[$((i + 1))]} in
 		icinga)
-			curl -nsLk "${monitors[$((i + 2))]}" |
+			curl --compressed -nsLk "${monitors[$((i + 2))]}" |
 				sed 1d | textios-csv_to_editable $filters |
 				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-$suff
 			;;
 		nagios)
-			curl -nsLk "${monitors[$((i + 2))]}" | textios-nagios_to_csv |
+			curl --compressed -nsLk "${monitors[$((i + 2))]}" |
+				textios-nagios_to_csv |
 				sed 1d | textios-csv_to_editable $filters |
 				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-$suff
