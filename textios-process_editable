@@ -78,7 +78,7 @@ for line in sys.stdin.readlines():
             date = added.strftime('%Y-%m-%d')
             time = added.strftime('%H:%M:00')
 
-        comment = m.group(5) or 'Scheduled Downtime'
+        comment = m.group(6) or 'Scheduled Downtime'
         starttime = datetime.datetime.now().strftime('%F %T')
 
         if host_downtime:
