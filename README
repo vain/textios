@@ -1,0 +1,30 @@
+textios
+=======
+
+Provides access to the most important parts of Icinga and Nagios:
+
+	- Overview of current problems
+	- ACKing problems
+	- Scheduling downtimes (hosts and services)
+
+textios uses Vim as its user interfaces. You get a list of services like
+this:
+
+	  haj2.config-slave      BACULA-DIR PROCESS         OK  PROCS OK: 1 process with command name bacula-dir''  
+	  haj2.config-slave      BACULA-FD PROCESS          OK  PROCS OK: 1 process with command name bacula-fd''   
+	  haj2.config-slave      BACULA-SD PROCESS          OK  PROCS OK: 1 process with command name bacula-sd''   
+
+You can then prefix each line with a command, for example:
+
+	hdown +2 Host down for the next two hours   haj2.config-slave      BACULA-FD PROCESS          OK  PROCS OK: 1 process with command name bacula-fd''   
+
+Do a :wq and you're done.
+
+textios uses curl to retrieve data. If you need to specify any
+credentials, do so in your ~/.netrc.
+
+
+TODOs
+=====
+
+- Use Icingas REST API
