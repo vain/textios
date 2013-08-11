@@ -10,16 +10,16 @@ import getpass
 url = sys.argv[1]
 
 for line in sys.stdin.readlines():
-    # An nbsp auftrennen:
+    # Split at nbsp:
     tokens = [i.strip() for i in line.split(' ')]
 
     cmd = tokens[0]
     host = tokens[1]
     service = tokens[2]
 
-    # Erlaubt:
+    # Allowed commands:
     #  ack
-    #  ack irgendein kommentar
+    #  ack whatever foo bar some comment
     m = re.search(r'^ack( (.*))?', cmd, re.I)
     if m:
         comment = m.group(2) or 'Acknowledged'
@@ -38,17 +38,17 @@ for line in sys.stdin.readlines():
             if subprocess.call(curlcmd, stdout=fp) != 0:
                 sys.stderr.write('ACK {} {} failed'.format(host, service))
 
-    # Erlaubt:
+    # Allowed commands:
     #
     #  down
-    #  down datum kommentar
-    #  down datum uhrzeit kommentar
-    #  down uhrzeit kommentar
+    #  down date comment
+    #  down date time comment
+    #  down time comment
     #
-    # - "datum" defaults to heute.
-    # - "uhrzeit" defaults to 12:00.
-    # - Uhrzeiten immer mit Stunden und Minuten, beide zweistellig.
-    # - "hdown" statt "down" für eine Host-Downtime.
+    # - "date" defaults to today.
+    # - "time" defaults to 12:00.
+    # - "time" format is always "%H:%M", leading zeroes mandatory.
+    # - "hdown" instead of "down" for host downtimes.
     m = re.search(r'^(h?)down( (\+\d+|(\d{4}-\d{2}-\d{2})? ?(\d{2}:\d{2})?) ?(.*))?',
                   cmd, re.I)
     if m:
