@@ -36,7 +36,7 @@ for line in sys.stdin.readlines():
                    '--data', 'persistent=1']
         with open('/dev/null', 'w') as fp:
             if subprocess.call(curlcmd, stdout=fp) != 0:
-                sys.stderr.write('ACK {} {} failed'.format(host, service))
+                sys.stderr.write('ACK {} {} failed\n'.format(host, service))
 
     # Allowed commands:
     #
@@ -110,6 +110,6 @@ for line in sys.stdin.readlines():
                       ]
         with open('/dev/null', 'w') as fp:
             if subprocess.call(curlcmd, stdout=fp) != 0:
-                sys.stderr.write('DOWN {} {} failed'.format(host, service))
+                sys.stderr.write('DOWN {} {} failed\n'.format(host, service))
 
 # vim: set et sta ts=4 sw=4 :
