@@ -1,0 +1,53 @@
+#!/bin/bash
+
+if [[ ! -f ~/.textiosrc ]]
+then
+	echo 'Cannot read ~/.textiosrc' >&2
+	exit 1
+fi
+
+. ~/.textiosrc
+
+hostexcludes=
+servicesonly=
+statusfilters='WARNING,CRITICAL,UNKNOWN'
+while getopts e:o:s: name
+do
+	case $name in
+		e)
+			hostexcludes=$OPTARG
+			;;
+		o)
+			servicesonly=$OPTARG
+			;;
+		s)
+			statusfilters=$OPTARG
+			;;
+	esac
+done
+shift $((OPTIND - 1))
+
+for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
+do
+	workdir=$(mktemp -d)
+
+	curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" >"$workdir"/data
+	(( $? == 0 )) || continue
+
+	if [[ ${monitors[$((i + 1))]} == nagios ]]
+	then
+		textios-nagios_to_csv <"$workdir"/data >"$workdir"/nagfilter
+		mv "$workdir"/{nagfilter,data}
+	fi
+
+	sed -i 1d "$workdir"/data
+
+	printf -v suff '%02d-%s' $i ${monitors[$i]}
+	textios-csv_to_html \
+		"$hostexcludes" \
+		"$servicesonly" \
+		"$statusfilters" \
+		<"$workdir"/data >/tmp/htmlios-${suff}.html
+
+	rm -Rf "$workdir"
+done
