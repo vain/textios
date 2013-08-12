@@ -24,7 +24,48 @@ textios uses curl to retrieve data. If you need to specify any
 credentials, do so in your ~/.netrc.
 
 
+Configuration
+=============
+
+~/.textiosrc -- a Bash snippet -- is sourced by textios. It defines one
+array:
+
+	monitors=(
+		monitorlabel
+		type
+		status_url
+		cmd_url
+
+		anothermonitor
+		type
+		status_url
+		cmd_url
+
+		...
+	)
+
+"monitorlabel" can be set to anything, like the name of the location
+that is monitored by this Icinga/Nagios instance. You can later filter
+using these labels.
+
+"type" can be "icinga" or "nagios".
+
+"status_url" must be the URL to your status.log (if Nagios) or the URL
+to Icinga's CSV output. This is a sane value for Icinga:
+
+	https://icinga.my-domain.foo/cgi-bin/icinga/status.cgi?host=all&type=detail&servicestatustypes=31&nostatusheader&csvoutput&serviceprops=10&hostprops=10'
+
+As you can see, some filtering can be done using this URL.
+
+"cmd_url" must point to your cmd.cgi, e.g.:
+
+	https://icinga.my-domain.foo/cgi-bin/icinga/cmd.cgi
+
+As textios uses curl to retrieve and send data, you must store your
+login credentials in your ~/.netrc.
+
+
 TODOs
 =====
 
-- Use Icingas REST API
+- Use Icinga's REST API
