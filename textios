@@ -8,7 +8,7 @@ fi
 
 . ~/.textiosrc
 
-filters='CRITICAL UNKNOWN'
+filters='CRITICAL,UNKNOWN'
 onlyhosts=0
 while getopts awh name
 do
@@ -17,7 +17,7 @@ do
 			filters=
 			;;
 		w)
-			filters='WARNING CRITICAL UNKNOWN'
+			filters='WARNING,CRITICAL,UNKNOWN'
 			;;
 		h)
 			onlyhosts=1
@@ -33,21 +33,21 @@ for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
 	[[ "$labels" != "  " ]] && \
 		[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
-	printf -v suff '%02d-%s' $i ${monitors[$i]}
-	echo Fetching $suff...
+	printf -v suff '%02d-%s' "$i" "${monitors[$i]}"
+	echo "Fetching $suff..."
 	case ${monitors[$((i + 1))]} in
 		icinga)
 			curl --compressed -nsLk "${monitors[$((i + 2))]}" |
-				sed 1d | textios-csv_to_editable $filters |
+				sed 1d | textios-csv_to_editable "$filters" |
 				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
-					>/tmp/textios-$suff
+					>/tmp/textios-"$suff"
 			;;
 		nagios)
 			curl --compressed -nsLk "${monitors[$((i + 2))]}" |
 				textios-nagios_to_csv |
-				sed 1d | textios-csv_to_editable $filters |
+				sed 1d | textios-csv_to_editable "$filters" |
 				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
-					>/tmp/textios-$suff
+					>/tmp/textios-"$suff"
 			;;
 	esac
 done
@@ -58,8 +58,8 @@ for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
 	[[ "$labels" != "  " ]] && \
 		[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
-	printf -v suff '%02d-%s' $i ${monitors[$i]}
-	echo Processing $suff...
+	printf -v suff '%02d-%s' "$i" "${monitors[$i]}"
+	echo "Processing $suff..."
 	textios-process_editable "${monitors[$((i + 3))]}" \
-		</tmp/textios-$suff
+		</tmp/textios-"$suff"
 done

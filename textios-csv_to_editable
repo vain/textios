@@ -4,15 +4,15 @@
 import csv
 import sys
 
-filter_states = []
+statusfilters = []
 if len(sys.argv) >= 2:
-    filter_states = sys.argv[1:]
+    statusfilters = [i for i in sys.argv[1].split(',') if i != '']
 
 buffered = []
 buffered_lens = {}
 reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
 for row in reader:
-    if len(filter_states) != 0 and not row[2] in filter_states:
+    if statusfilters and not row[2] in statusfilters:
         continue
 
     buffered.append(row)
