@@ -11,7 +11,10 @@ fi
 hostexcludes=
 servicesonly=
 statusfilters='WARNING,CRITICAL,UNKNOWN'
-while getopts e:o:s: name
+output=/tmp/htmlios.htm
+csvinput=
+csvoutput=
+while getopts e:o:s:O:c:C: name
 do
 	case $name in
 		e)
@@ -23,31 +26,54 @@ do
 		s)
 			statusfilters=$OPTARG
 			;;
+		O)
+			output=$OPTARG
+			;;
+		c)
+			csvinput=$OPTARG
+			;;
+		C)
+			csvoutput=$OPTARG
+			;;
 	esac
 done
 shift $((OPTIND - 1))
+labels=" $1 "
 
-for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
-do
-	workdir=$(mktemp -d)
+workdir=$(mktemp -d)
+trap 'rm -Rf "$workdir"' EXIT
+: > "$workdir"/final.csv
 
-	curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" >"$workdir"/data
-	(( $? == 0 )) || continue
+if [[ -n "$csvinput" ]]
+then
+	cp "$csvinput" "$workdir"/final.csv
+else
+	for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
+	do
+		[[ "$labels" != "  " ]] && \
+			[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
 
-	if [[ ${monitors[$((i + 1))]} == nagios ]]
-	then
-		textios-nagios_to_csv <"$workdir"/data >"$workdir"/nagfilter
-		mv "$workdir"/{nagfilter,data}
-	fi
+		curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" >"$workdir"/data
+		(( $? == 0 )) || continue
 
-	sed -i 1d "$workdir"/data
+		if [[ ${monitors[$((i + 1))]} == nagios ]]
+		then
+			textios-nagios_to_csv <"$workdir"/data >"$workdir"/nagfilter
+			mv "$workdir"/{nagfilter,data}
+		fi
 
-	printf -v suff '%02d-%s' $i ${monitors[$i]}
-	textios-csv_to_html \
-		"$hostexcludes" \
-		"$servicesonly" \
-		"$statusfilters" \
-		<"$workdir"/data >/tmp/htmlios-${suff}.html
+		sed 1d "$workdir"/data >>"$workdir"/final.csv
+	done
+fi
 
-	rm -Rf "$workdir"
-done
+if [[ -n $csvoutput ]]
+then
+	cp "$workdir"/final.csv "$csvoutput"
+	exit
+fi
+
+textios-csv_to_html \
+	"$hostexcludes" \
+	"$servicesonly" \
+	"$statusfilters" \
+	<"$workdir"/final.csv >"$output"

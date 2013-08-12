@@ -32,12 +32,34 @@ textios is meant for interactive use, htmlios will render HTML files.
 Large fonts. Stuff like that. Suitable for your displaying your
 monitoring in your office.
 
-htmlios does more filtering:
+htmlios is able to do more filtering than textios can:
 
 	htmlios -e host1,host2 -o UPDATES -s WARNING,CRITICAL
 
 "host1" and "host2" will be skipped, only updates will be shown, only
 the states "warning" and "critical" will be shown.
+
+htmlios is able to save intermediate CSV output:
+
+	htmlios [...] -C foo.csv
+
+Later on, you can generate multiple HTML files from this data:
+
+	htmlios -o UPDATES [...] -c foo.csv -O updates.html
+	htmlios -o 'DISK SPACE' [...] -c foo.csv -O disks.html
+
+You can also combine data from multiple Icinga/Nagios instances:
+
+	htmlios -C location1.csv location1
+	htmlios -C location2.csv location2
+	htmlios -C location3.csv location3
+
+	cat location{1,2,3}.csv >all.csv
+
+	htmlios -c location1.csv -O location1-everything.html
+	htmlios -c all.csv -o UPDATES -O all-updates.html
+
+See? You only need to download your data once.
 
 
 Configuration
@@ -62,7 +84,7 @@ array:
 
 "monitorlabel" can be set to anything, like the name of the location
 that is monitored by this Icinga/Nagios instance. You can later filter
-using these labels.
+using these labels: "textios [...] 'monitorlabel anothermonitor foobar'"
 
 "type" can be "icinga" or "nagios".
 
