@@ -24,6 +24,22 @@ textios uses curl to retrieve data. If you need to specify any
 credentials, do so in your ~/.netrc.
 
 
+htmlios
+=======
+
+htmlios uses the same configuration as textios (see below). While
+textios is meant for interactive use, htmlios will render HTML files.
+Large fonts. Stuff like that. Suitable for your displaying your
+monitoring in your office.
+
+htmlios does more filtering:
+
+	htmlios -e host1,host2 -o UPDATES -s WARNING,CRITICAL
+
+"host1" and "host2" will be skipped, only updates will be shown, only
+the states "warning" and "critical" will be shown.
+
+
 Configuration
 =============
 
@@ -63,6 +79,13 @@ As you can see, some filtering can be done using this URL.
 
 As textios uses curl to retrieve and send data, you must store your
 login credentials in your ~/.netrc.
+
+
+Disclaimer
+==========
+
+These tools fit my needs. They are not universal tools that will please
+everyone -- and they never will be.
 
 
 TODOs
