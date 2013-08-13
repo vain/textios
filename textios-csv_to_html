@@ -109,8 +109,8 @@ statusfilters = [i for i in sys.argv[4].split(',') if i != '']
 reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
 filtered = []
 statusmapping = {
-    'unknown': 0,
-    'critical': 1,
+    'critical': 0,
+    'unknown': 1,
     'warning': 2,
     'ok': 3,
 }
