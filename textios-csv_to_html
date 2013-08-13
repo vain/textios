@@ -39,6 +39,7 @@ html = Template("""<!DOCTYPE html>
         background: -webkit-linear-gradient(top,  #000000 0%,#997700 100%);
         background: linear-gradient(to bottom,  #000000 0%,#997700 100%);
     }
+    body.warning table.allokay { display: none; }
     body.unknown {
         background: #000000;
         background: -moz-linear-gradient(top,  #000000 0%, #6801b2 100%);
@@ -46,6 +47,7 @@ html = Template("""<!DOCTYPE html>
         background: -webkit-linear-gradient(top,  #000000 0%,#6801b2 100%);
         background: linear-gradient(to bottom,  #000000 0%,#6801b2 100%);
     }
+    body.unknown table.allokay { display: none; }
     body.critical {
         background: #000000;
         background: -moz-linear-gradient(top,  #000000 0%, #7f0000 100%);
@@ -53,7 +55,17 @@ html = Template("""<!DOCTYPE html>
         background: -webkit-linear-gradient(top,  #000000 0%,#7f0000 100%);
         background: linear-gradient(to bottom,  #000000 0%,#7f0000 100%);
     }
+    body.critical table.allokay { display: none; }
     table { width: 100% }
+    table.allokay {
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+    table.allokay td {
+        font-size: 500px;
+        opacity: 0.6;
+    }
     tr { width: 100%; text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.4); }
     tr.warning {
         background: #ffd519;
@@ -94,6 +106,7 @@ html = Template("""<!DOCTYPE html>
     </style>
 </head>
 <body class="ok $bodyclasses">
+    <table class="allokay"><tr><td>✌</td></tr></table>
     <table>
 $tablerows
     </table>
