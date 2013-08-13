@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import csv
+from operator import itemgetter
 from string import Template
 import sys
 
@@ -102,9 +103,14 @@ servicesonly = [i for i in sys.argv[2].split(',') if i != '']
 statusfilters = [i for i in sys.argv[3].split(',') if i != '']
 
 reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
-
-bodyclasses = set()
-tablerows = ""
+filtered = []
+statusmapping = {
+    'unknown': 0,
+    'critical': 1,
+    'warning': 2,
+    'ok': 3,
+}
+statusmappinginv = { v: k for k, v in statusmapping.items() }
 
 for row in reader:
     host = row[0]
@@ -121,7 +127,16 @@ for row in reader:
     if statusfilters and status not in statusfilters:
         continue
 
-    bodyclasses.add(status.lower())
+    filtered.append((host, service, statusmapping[status.lower()], detail))
+
+filtered = sorted(filtered, key=itemgetter(2, 0, 1))
+
+bodyclasses = set()
+tablerows = ""
+
+for host, service, numericalstatus, detail in filtered:
+    status = statusmappinginv[numericalstatus]
+    bodyclasses.add(status)
 
     tablerows += (
         '<tr class="{}">'
@@ -130,7 +145,7 @@ for row in reader:
         '<td class="detail">{}</td>'
         '</tr>\n'
     ).format(
-        status.lower(),
+        status,
         host,
         service,
         detail,
