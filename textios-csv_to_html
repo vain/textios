@@ -96,13 +96,16 @@ html = Template("""<!DOCTYPE html>
         background: linear-gradient(to bottom,  #00ff06 0%,#00cc00 100%);
     }
     td {
-        font-size: 42px;
+        font-size: 56px;
         padding-top: 10px;
         padding-bottom: 9px;
         padding-left: 15px;
         padding-right: 10px;
     }
-    td.detail { font-size: 24px }
+    td.detail {
+        font-size: 24px;
+        width: 25%;
+    }
     </style>
 </head>
 <body class="ok $bodyclasses">
