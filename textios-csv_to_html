@@ -58,14 +58,36 @@ html = Template("""<!DOCTYPE html>
         width: 100%;
         border-spacing: 0px;
     }
+    @-moz-keyframes smiley {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.3 }
+        100% { opacity: 0.03 }
+    }
+    @-webkit-keyframes smiley {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.3 }
+        100% { opacity: 0.03 }
+    }
+    @keyframes smiley {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.3 }
+        100% { opacity: 0.03 }
+    }
     table.allokay {
         height: 100%;
         width: 100%;
         text-align: center;
     }
     table.allokay td {
-        font-size: 500px;
-        opacity: 0.6;
+        font-size: 700px;
+        opacity: 0.03;
+
+        -webkit-animation-duration: 2s;
+        -moz-animation-duration: 2s;
+        animation-duration: 2s;
+        -webkit-animation-name: smiley;
+        -moz-animation-name: smiley;
+        animation-name: smiley;
     }
     tr { width: 100%; text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.4); }
     tr.warning {
@@ -110,7 +132,7 @@ html = Template("""<!DOCTYPE html>
     </style>
 </head>
 <body class="ok $bodyclasses">
-    <table class="allokay"><tr><td>✌</td></tr></table>
+    <table class="allokay"><tr><td>☺</td></tr></table>
     <table>
 $tablerows
     </table>
