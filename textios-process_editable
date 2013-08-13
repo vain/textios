@@ -35,8 +35,9 @@ for line in sys.stdin.readlines():
                    '--data', 'send_notification=1',
                    '--data', 'persistent=1']
         with open('/dev/null', 'w') as fp:
-            if subprocess.call(curlcmd, stdout=fp) != 0:
-                sys.stderr.write('ACK {} {} failed\n'.format(host, service))
+            ret = subprocess.call(curlcmd, stdout=fp)
+            if ret != 0:
+                sys.stderr.write('Failed: {}\n'.format(ret))
 
     # Allowed commands:
     #
@@ -109,7 +110,8 @@ for line in sys.stdin.readlines():
                        '--data', 'fixed=1',
                       ]
         with open('/dev/null', 'w') as fp:
-            if subprocess.call(curlcmd, stdout=fp) != 0:
-                sys.stderr.write('DOWN {} {} failed\n'.format(host, service))
+            ret = subprocess.call(curlcmd, stdout=fp)
+            if ret != 0:
+                sys.stderr.write('Failed, curl error {}\n'.format(ret))
 
 # vim: set et sta ts=4 sw=4 :

@@ -58,9 +58,10 @@ else
 			[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
 
 		curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" >"$workdir"/data
-		if (( $? != 0 ))
+		ret=$?
+		if (( ret != 0 ))
 		then
-			echo "htmlios: Fetching ${monitors[$i]} failed." >&2
+			echo "htmlios: Fetching ${monitors[$i]} failed, curl error $ret" >&2
 			continue
 		fi
 
