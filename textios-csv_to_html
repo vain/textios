@@ -103,7 +103,8 @@ $tablerows
 
 hostexcludes = [i for i in sys.argv[1].split(',') if i != '']
 servicesonly = [i for i in sys.argv[2].split(',') if i != '']
-statusfilters = [i for i in sys.argv[3].split(',') if i != '']
+servicesexcluded = [i for i in sys.argv[3].split(',') if i != '']
+statusfilters = [i for i in sys.argv[4].split(',') if i != '']
 
 reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
 filtered = []
@@ -125,6 +126,9 @@ for row in reader:
         continue
 
     if servicesonly and service not in servicesonly:
+        continue
+
+    if servicesexcluded and service in servicesexcluded:
         continue
 
     if statusfilters and status not in statusfilters:

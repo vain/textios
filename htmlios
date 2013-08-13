@@ -10,11 +10,12 @@ fi
 
 hostexcludes=
 servicesonly=
+servicesexcluded=
 statusfilters='WARNING,CRITICAL,UNKNOWN'
 output=/tmp/htmlios.htm
 csvinput=
 csvoutput=
-while getopts e:o:s:O:c:C: name
+while getopts e:o:E:s:O:c:C: name
 do
 	case $name in
 		e)
@@ -22,6 +23,9 @@ do
 			;;
 		o)
 			servicesonly=$OPTARG
+			;;
+		E)
+			servicesexcluded=$OPTARG
 			;;
 		s)
 			statusfilters=$OPTARG
@@ -79,5 +83,6 @@ fi
 textios-csv_to_html \
 	"$hostexcludes" \
 	"$servicesonly" \
+	"$servicesexcluded" \
 	"$statusfilters" \
 	<"$workdir"/final.csv >"$output"
