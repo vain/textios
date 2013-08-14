@@ -86,7 +86,7 @@ html = Template("""<!DOCTYPE html>
     div.allokay {
         font-size: 700px;
         height: 700px;
-        margin-top: -680px;
+        margin-top: -580px;
         opacity: 0.03;
         position: fixed;
         text-align: center;
