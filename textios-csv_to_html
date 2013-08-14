@@ -137,7 +137,6 @@ html = Template("""<!DOCTYPE html>
         font-size: 60px;
         padding-top: 10px;
         padding-bottom: 9px;
-        padding-left: 15px;
         padding-right: 10px;
     }
     tr.detail td {
