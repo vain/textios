@@ -15,7 +15,8 @@ statusfilters='WARNING,CRITICAL,UNKNOWN'
 output=/tmp/htmlios.htm
 csvinput=
 csvoutput=
-while getopts e:o:E:s:O:c:C: name
+title=
+while getopts e:o:E:s:O:c:C:t: name
 do
 	case $name in
 		e)
@@ -38,6 +39,9 @@ do
 			;;
 		C)
 			csvoutput=$OPTARG
+			;;
+		t)
+			title=$OPTARG
 			;;
 	esac
 done
@@ -86,4 +90,5 @@ textios-csv_to_html \
 	"$servicesonly" \
 	"$servicesexcluded" \
 	"$statusfilters" \
+	"$title" \
 	<"$workdir"/final.csv >"$output"

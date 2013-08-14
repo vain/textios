@@ -54,6 +54,16 @@ html = Template("""<!DOCTYPE html>
         background: linear-gradient(to bottom, #7f0000 0%, #300000 100%);
     }
     body.critical div.allokay { display: none; }
+    div.title {
+        background-color: rgba(0,0,0, 0.4);
+        color: #eeeeee;
+        font-size: 48px;
+        padding-top: 7px;
+        padding-left: 15px;
+        padding-bottom: 6px;
+        text-align: center;
+        width: 100%;
+    }
     table {
         width: 100%;
         border-spacing: 0;
@@ -137,6 +147,7 @@ html = Template("""<!DOCTYPE html>
     </style>
 </head>
 <body class="ok $bodyclasses">
+    $title
     <div class="allokay">☺</div>
     <table>
 $tablerows
@@ -149,6 +160,8 @@ hostexcludes = [i for i in sys.argv[1].split(',') if i != '']
 servicesonly = [i for i in sys.argv[2].split(',') if i != '']
 servicesexcluded = [i for i in sys.argv[3].split(',') if i != '']
 statusfilters = [i for i in sys.argv[4].split(',') if i != '']
+title = sys.argv[5]
+title = '<div class="title">{}</div>'.format(title) if title else ""
 
 reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
 filtered = []
@@ -205,6 +218,7 @@ for host, service, numericalstatus, detail in filtered:
 
 print(html.substitute(
     bodyclasses=" ".join(bodyclasses),
+    title=title,
     tablerows=tablerows,
 ))
 
