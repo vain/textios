@@ -21,51 +21,84 @@ html = Template("""<!DOCTYPE html>
     body {
         height: 100%;
         overflow: hidden;
-        margin: 0px;
+        margin: 0;
     }
     body.ok {
         background: #00ff06;
-        background: -moz-linear-gradient(top,  #00ff06 0%, #007f00 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00ff06), color-stop(100%,#007f00));
-        background: -webkit-linear-gradient(top,  #00ff06 0%,#007f00 100%);
-        background: linear-gradient(to bottom,  #00ff06 0%,#007f00 100%);
+        background: -moz-linear-gradient(top, #00ff06 0%, #007f00 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #00ff06), color-stop(100%, #007f00));
+        background: -webkit-linear-gradient(top, #00ff06 0%, #007f00 100%);
+        background: linear-gradient(to bottom, #00ff06 0%, #007f00 100%);
     }
     body.warning {
-        background: #000000;
-        background: -moz-linear-gradient(top,  #000000 0%, #997700 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#997700));
-        background: -webkit-linear-gradient(top,  #000000 0%,#997700 100%);
-        background: linear-gradient(to bottom,  #000000 0%,#997700 100%);
+        background: #b28800;
+        background: -moz-linear-gradient(top, #b28800 0%, #4c3a00 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b28800), color-stop(100%, #4c3a00));
+        background: -webkit-linear-gradient(top, #b28800 0%, #4c3a00 100%);
+        background: linear-gradient(to bottom, #b28800 0%, #4c3a00 100%);
     }
-    body.warning table.allokay { display: none; }
+    body.warning div.allokay { display: none; }
     body.unknown {
-        background: #000000;
-        background: -moz-linear-gradient(top,  #000000 0%, #6801b2 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#6801b2));
-        background: -webkit-linear-gradient(top,  #000000 0%,#6801b2 100%);
-        background: linear-gradient(to bottom,  #000000 0%,#6801b2 100%);
+        background: #7402cc;
+        background: -moz-linear-gradient(top, #7402cc 0%, #3a0166 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7402cc), color-stop(100%, #3a0166));
+        background: -webkit-linear-gradient(top, #7402cc 0%, #3a0166 100%);
+        background: linear-gradient(to bottom, #7402cc 0%, #3a0166 100%);
     }
-    body.unknown table.allokay { display: none; }
+    body.unknown div.allokay { display: none; }
     body.critical {
-        background: #000000;
-        background: -moz-linear-gradient(top,  #000000 0%, #7f0000 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#000000), color-stop(100%,#7f0000));
-        background: -webkit-linear-gradient(top,  #000000 0%,#7f0000 100%);
-        background: linear-gradient(to bottom,  #000000 0%,#7f0000 100%);
+        background: #7f0000;
+        background: -moz-linear-gradient(top, #7f0000 0%, #300000 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7f0000), color-stop(100%, #300000));
+        background: -webkit-linear-gradient(top, #7f0000 0%, #300000 100%);
+        background: linear-gradient(to bottom, #7f0000 0%, #300000 100%);
     }
-    body.critical table.allokay { display: none; }
+    body.critical div.allokay { display: none; }
+    div.title {
+        background-color: rgba(0,0,0, 0.4);
+        color: #eeeeee;
+        font-size: 48px;
+        padding-top: 7px;
+        padding-left: 15px;
+        padding-bottom: 6px;
+        text-align: center;
+        width: 100%;
+    }
     table {
         width: 100%;
-        border-spacing: 0px;
+        border-spacing: 0;
     }
-    table.allokay {
-        height: 100%;
-        width: 100%;
+    @-moz-keyframes smiley {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.3 }
+        100% { opacity: 0.03 }
+    }
+    @-webkit-keyframes smiley {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.3 }
+        100% { opacity: 0.03 }
+    }
+    @keyframes smiley {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.2 }
+        100% { opacity: 0.03 }
+    }
+    div.allokay {
+        font-size: 700px;
+        height: 700px;
+        margin-top: -680px;
+        opacity: 0.03;
+        position: fixed;
         text-align: center;
-    }
-    table.allokay td {
-        font-size: 500px;
-        opacity: 0.6;
+        top: 50%;
+        width: 100%;
+
+        -webkit-animation-duration: 4s;
+        -moz-animation-duration: 4s;
+        animation-duration: 4s;
+        -webkit-animation-name: smiley;
+        -moz-animation-name: smiley;
+        animation-name: smiley;
     }
     tr { width: 100%; text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.4); }
     tr.warning {
@@ -75,6 +108,7 @@ html = Template("""<!DOCTYPE html>
         background: -webkit-linear-gradient(top,  #ffd519 0%,#e5bf16 100%);
         background: linear-gradient(to bottom,  #ffd519 0%,#e5bf16 100%);
     }
+    tr.warning.detail { background: #e5bf16; }
     tr.critical {
         background: #ff0000;
         background: -moz-linear-gradient(top,  #ff0000 0%, #d30000 100%);
@@ -82,6 +116,7 @@ html = Template("""<!DOCTYPE html>
         background: -webkit-linear-gradient(top,  #ff0000 0%,#d30000 100%);
         background: linear-gradient(to bottom,  #ff0000 0%,#d30000 100%);
     }
+    tr.critical.detail { background: #d30000; }
     tr.unknown {
         background: #ff32ff;
         background: -moz-linear-gradient(top,  #ff32ff 0%, #cc3dcc 100%);
@@ -89,6 +124,7 @@ html = Template("""<!DOCTYPE html>
         background: -webkit-linear-gradient(top,  #ff32ff 0%,#cc3dcc 100%);
         background: linear-gradient(to bottom,  #ff32ff 0%,#cc3dcc 100%);
     }
+    tr.unknown.detail { background: #cc3dcc; }
     tr.ok {
         background: #00ff06;
         background: -moz-linear-gradient(top,  #00ff06 0%, #00cc00 100%);
@@ -96,21 +132,23 @@ html = Template("""<!DOCTYPE html>
         background: -webkit-linear-gradient(top,  #00ff06 0%,#00cc00 100%);
         background: linear-gradient(to bottom,  #00ff06 0%,#00cc00 100%);
     }
+    tr.ok.detail { background: #00cc00; }
     td {
-        font-size: 56px;
+        font-size: 60px;
         padding-top: 10px;
         padding-bottom: 9px;
         padding-left: 15px;
         padding-right: 10px;
     }
-    td.detail {
-        font-size: 24px;
-        width: 25%;
+    tr.detail td {
+        font-size: 22px;
+        padding-top: 0;
     }
     </style>
 </head>
 <body class="ok $bodyclasses">
-    <table class="allokay"><tr><td>✌</td></tr></table>
+    $title
+    <div class="allokay">☺</div>
     <table>
 $tablerows
     </table>
@@ -122,6 +160,8 @@ hostexcludes = [i for i in sys.argv[1].split(',') if i != '']
 servicesonly = [i for i in sys.argv[2].split(',') if i != '']
 servicesexcluded = [i for i in sys.argv[3].split(',') if i != '']
 statusfilters = [i for i in sys.argv[4].split(',') if i != '']
+title = sys.argv[5]
+title = '<div class="title">{}</div>'.format(title) if title else ""
 
 reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
 filtered = []
@@ -166,17 +206,19 @@ for host, service, numericalstatus, detail in filtered:
         '<tr class="{}">'
         '<td class="host">{}</td>'
         '<td class="service">{}</td>'
-        '<td class="detail">{}</td>'
         '</tr>\n'
+        '<tr class="detail {}"><td></td><td>{}</td></tr>'
     ).format(
         status,
         host,
         service,
+        status,
         detail,
     )
 
 print(html.substitute(
     bodyclasses=" ".join(bodyclasses),
+    title=title,
     tablerows=tablerows,
 ))
 
