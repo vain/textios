@@ -143,6 +143,7 @@ html = Template("""<!DOCTYPE html>
     tr.detail td {
         font-size: 22px;
         padding-top: 0;
+        white-space: nowrap;
     }
     </style>
 </head>
