@@ -21,7 +21,7 @@ html = Template("""<!DOCTYPE html>
     body {
         height: 100%;
         overflow: hidden;
-        margin: 0px;
+        margin: 0;
     }
     body.ok {
         background: #00ff06;
@@ -56,7 +56,7 @@ html = Template("""<!DOCTYPE html>
     body.critical table.allokay { display: none; }
     table {
         width: 100%;
-        border-spacing: 0px;
+        border-spacing: 0;
     }
     @-moz-keyframes smiley {
         0% { opacity: 0.03 }
