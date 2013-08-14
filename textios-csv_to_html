@@ -22,7 +22,6 @@ html = Template("""<!DOCTYPE html>
         height: 100%;
         overflow: hidden;
         margin: 0;
-        word-break: keep-all;
     }
     body.ok {
         background: #00ff06;
@@ -211,7 +210,7 @@ for host, service, numericalstatus, detail in filtered:
         '<tr class="detail {}"><td></td><td>{}</td></tr>'
     ).format(
         status,
-        host,
+        host.replace('-', '&#8209;'),
         service,
         status,
         detail,
