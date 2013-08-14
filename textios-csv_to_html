@@ -70,7 +70,7 @@ html = Template("""<!DOCTYPE html>
     }
     @keyframes smiley {
         0% { opacity: 0.03 }
-        50% { opacity: 0.3 }
+        50% { opacity: 0.2 }
         100% { opacity: 0.03 }
     }
     table.allokay {
@@ -82,9 +82,9 @@ html = Template("""<!DOCTYPE html>
         font-size: 700px;
         opacity: 0.03;
 
-        -webkit-animation-duration: 2s;
-        -moz-animation-duration: 2s;
-        animation-duration: 2s;
+        -webkit-animation-duration: 4s;
+        -moz-animation-duration: 4s;
+        animation-duration: 4s;
         -webkit-animation-name: smiley;
         -moz-animation-name: smiley;
         animation-name: smiley;
