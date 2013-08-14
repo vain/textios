@@ -22,6 +22,7 @@ html = Template("""<!DOCTYPE html>
         height: 100%;
         overflow: hidden;
         margin: 0;
+        word-break: keep-all;
     }
     body.ok {
         background: #00ff06;
