@@ -59,7 +59,6 @@ html = Template("""<!DOCTYPE html>
         color: #eeeeee;
         font-size: 48px;
         padding-top: 7px;
-        padding-left: 15px;
         padding-bottom: 6px;
         text-align: center;
         width: 100%;
@@ -137,6 +136,7 @@ html = Template("""<!DOCTYPE html>
         font-size: 60px;
         padding-top: 10px;
         padding-bottom: 9px;
+        padding-left: 15px;
         padding-right: 10px;
     }
     tr.detail td {
