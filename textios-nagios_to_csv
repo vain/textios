@@ -2,7 +2,7 @@
 
 BEGIN {
 	FS = "="
-	print "'Host';'Service';'Status';'_';'_';'_';'Status_Information'"
+	print "'Host';'Service';'Status';'_';'_';'Attempt';'Status_Information'"
 }
 
 /^host/ {
@@ -15,6 +15,14 @@ BEGIN {
 
 /^\tservice_description/ {
 	service_description = $2
+}
+
+/^\tcurrent_attempt/ {
+	current_attempt = $2
+}
+
+/^\tmax_attempts/ {
+	max_attempts = $2
 }
 
 /^\tcurrent_state/ {
@@ -53,6 +61,7 @@ BEGIN {
 /^\t}/ {
 	if (host_name != "") {
 		print "'" host_name "';'" service_description "';'" \
-			  current_state "';'_';'_';'_';'" plugin_output "'"
+			  current_state "';'_';'_';'" \
+			  current_attempt "/" max_attempts "';'" plugin_output "'"
 	}
 }
