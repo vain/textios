@@ -10,7 +10,8 @@ fi
 
 filters='CRITICAL,UNKNOWN'
 onlyhosts=0
-while getopts awh name
+softstates=0
+while getopts awhs name
 do
 	case $name in
 		a)
@@ -21,6 +22,9 @@ do
 			;;
 		h)
 			onlyhosts=1
+			;;
+		s)
+			softstates=1
 			;;
 	esac
 done
@@ -38,7 +42,7 @@ do
 	case ${monitors[$((i + 1))]} in
 		icinga)
 			curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
-				sed 1d | textios-csv_to_editable "$filters" |
+				sed 1d | textios-csv_to_editable "$filters" "$softstates" |
 				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-"$suff"
 			ret=${PIPESTATUS[0]}
@@ -46,7 +50,7 @@ do
 		nagios)
 			curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
 				textios-nagios_to_csv |
-				sed 1d | textios-csv_to_editable "$filters" |
+				sed 1d | textios-csv_to_editable "$filters" "$softstates" |
 				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-"$suff"
 			ret=${PIPESTATUS[0]}
