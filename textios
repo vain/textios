@@ -41,24 +41,30 @@ do
 	echo "Fetching $suff..."
 	case ${monitors[$((i + 1))]} in
 		icinga)
-			curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
-				sed 1d | textios-csv_to_editable "$filters" "$softstates" |
-				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
+			(
+				curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
+					sed 1d | textios-csv_to_editable "$filters" "$softstates" |
+					{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-"$suff"
-			ret=${PIPESTATUS[0]}
+				ret=${PIPESTATUS[0]}
+				(( ret != 0 )) && echo "$suff failed, curl error $ret" >&2
+			) &
 			;;
 		nagios)
-			curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
-				textios-nagios_to_csv |
-				sed 1d | textios-csv_to_editable "$filters" "$softstates" |
-				{ (( onlyhosts )) && textios-onlyhosts || cat; } \
+			(
+				curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
+					textios-nagios_to_csv |
+					sed 1d | textios-csv_to_editable "$filters" "$softstates" |
+					{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-"$suff"
-			ret=${PIPESTATUS[0]}
+				ret=${PIPESTATUS[0]}
+				(( ret != 0 )) && echo "$suff failed, curl error $ret" >&2
+			) &
 			;;
 	esac
-	(( ret != 0 )) && echo "Failed, curl error $ret" >&2
 done
 
+wait
 vim -o /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
