@@ -1,0 +1,82 @@
+.TH TEXTIOSRC 1 "August 2013" "textiosrc" "Configuration for textios/htmlios"
+.\" -------------------------------------------------------------------
+.SH NAME
+textiosrc \- configuration file for textios and htmlios
+.\" -------------------------------------------------------------------
+.SH DESCRIPTION
+There are two files that you need to edit in order to configure
+\fBtextios\fP and \fBhtmlios\fP: \fI~/.textiosrc\fP and \fI~/.netrc\fP.
+The latter is only used by \fBcurl\fP(1), though: Login credentials
+are stored there.
+.\" -------------------------------------------------------------------
+.SH "RC FILE"
+The file \fI~/.textiosrc\fP \(em a Bash snippet, actually \(em defines
+the URLs to your Icinga and Nagios instances. It is used by
+\fBtextios\fP and \fBhtmlios\fP.
+.P
+It defines exactly one Bash array called \fBmonitors\fP:
+.P
+.nf
+\f(CW
+\&	monitors=(
+\&		monitorlabel
+\&		type
+\&		status_url
+\&		cmd_url
+\&
+\&		anothermonitor
+\&		type
+\&		status_url
+\&		cmd_url
+\&
+\&		...
+\&	)
+\fP
+.fi
+.P
+As you can see, four consecutive elements belong to one monitoring
+instance.
+.TP
+.I monitorlabel
+This can be set to anything, like the name of the location
+that is monitored by this Icinga/Nagios instance. You can later filter
+using these labels.
+.TP
+.I type
+Can be \fBicinga\fP or \fBnagios\fP.
+.TP
+.I status_url
+This must be the URL to your \fIstatus.log\fP (if Nagios) or the URL
+to Icinga's CSV output. This is a sane value for Icinga:
+
+.nf
+\f(CW
+\&	https://icinga.my-domain.foo/cgi-bin/icinga/status.cgi?\\
+\&	host=all&type=detail&servicestatustypes=31&nostatusheader\\
+\&	&csvoutput&serviceprops=10&hostprops=10
+\fP
+.fi
+
+As you can see, some filtering can be done using this URL.
+.TP
+.I cmd_url
+Must point to your \fIcmd.cgi\fP, e.g.:
+
+.nf
+\f(CW
+	https://icinga.my-domain.foo/cgi-bin/icinga/cmd.cgi
+\fP
+.fi
+.\" -------------------------------------------------------------------
+.SH "RC FILE FOR CURL"
+See \fBnetrc\fP(5).
+.\" -------------------------------------------------------------------
+.SH AUTHORS
+See the accompanying \fILICENSE\fP file.
+.\" -------------------------------------------------------------------
+.SH "SEE ALSO"
+.BR textios (1),
+.BR htmlios (1),
+.BR vim (1),
+.BR curl (1),
+.BR netrc (5)

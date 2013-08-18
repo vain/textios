@@ -1,0 +1,96 @@
+.TH TEXTIOS 1 "August 2013" "textios" "Text interface to Icinga and Nagios"
+.\" -------------------------------------------------------------------
+.SH NAME
+textios \- text interface to Icinga and Nagios
+.\" -------------------------------------------------------------------
+.SH SYNOPSIS
+\fBtextios\fP [\fIOPTION...\fP] [\fILOCATIONS\fP]
+.\" -------------------------------------------------------------------
+.SH DESCRIPTION
+\fBtextios\fP provides you with a textual interface to the monitoring
+systems Icinga and Nagios. It's an interactive tool that spawns
+\fBvim\fP(1). There, you can specify commands like acknowledging a
+service problem. \fBcurl\fP(1) is used for downloads and uploads.
+.\" -------------------------------------------------------------------
+.SH OPTIONS
+By default, \fBtextios\fP only shows CRITICALs and UNKNOWNs, it also
+omits soft states. Information for all locations will be shown. You can
+alter that behaviour using the following options.
+.TP
+.B \-w
+Also show WARNINGs.
+.TP
+.B \-a
+Show all service states, i.e. OK, WARNING, UNKNOWN, CRITICAL.
+.TP
+.B \-s
+Show soft states as well.
+.TP
+.B \-h
+After all other filters have been applied, \fB\-h\fP kicks out
+services and leaves you only with hosts. That is, to show all hosts (and
+not their services), you'll need to use \fB\-ash\fP.
+.P
+After these options, you can specify several locations. For example, if
+you've configured the locations \(lqffm\(rq, \(lqber\(rq and
+\(lqnur\(rq, you'd have to use the following command to show all service
+problems (including warnings) at \(lqffm\(rq and \(lqber\(rq:
+.P
+.nf
+\f(CW
+\&	$ textios -w 'ffm ber'
+\fP
+.fi
+.P
+Note: The locations must be given as one single argument.
+.\" -------------------------------------------------------------------
+.SH "INTERACTIVE COMMANDS"
+Once you're in \fBvim\fP(1), you can prefix a line with a command.
+Here's what you can do:
+.TP
+\fBack\fP [\fICOMMENT\fP]
+Acknowledge a problem. The comment is optional and defaults to
+\fBAcknowledged\fP.
+.TP
+\fBdown\fP [\fIDATE\fP [\fITIME\fP]] [\fICOMMENT\fP]
+Schedule a service downtime. \fIDATE\fP, \fITIME\fP and \fICOMMENT\fP
+are optional and default to \(lqtoday\(rq, \fB12:00\fP and \fBScheduled
+Downtime\fP. You have to specify the date as \fB%Y-%m-%d\fP and the time
+\fB%H:%M\fP, leading zeroes mandatory in both cases.
+.TP
+\fBhdown\fP [\fIDATE\fP [\fITIME\fP]] [\fICOMMENT\fP]
+Like \fBdown\fP but schedules and downtime for the whole host.
+.TP
+\fBdown\fP \fB+\fP\fIN\fP [\fICOMMENT\fP]
+.TQ
+\fBhdown\fP \fB+\fP\fIN\fP [\fICOMMENT\fP]
+Schedule a (host) downtime that lasts for the next \fIN\fP hours.
+.P
+So, if you wanted to acknowledge all problems regarding Apache web
+servers, you'd do this in \fBvim\fP(1):
+.P
+.nf
+\f(CW
+\&	:windo g/apache/s/^/ack I'll take care of it.
+\fP
+.fi
+.P
+The \fB:windo\fP is needed if you're displaying information about
+multiple locations because \fBtextios\fP will tell \fBvim\fP(1) to open
+one split window for each location.
+.\" -------------------------------------------------------------------
+.SH CONFIGURATION
+See \fBtextiosrc\fP(5).
+.\" -------------------------------------------------------------------
+.SH BUGS
+Currently, no bugs are known. If you find one, we invite you to report
+it at the GitHub Issue tracker (http://github.com/vain/textios/issues).
+.\" -------------------------------------------------------------------
+.SH AUTHORS
+See the accompanying \fILICENSE\fP file.
+.\" -------------------------------------------------------------------
+.SH "SEE ALSO"
+.BR textiosrc (5),
+.BR htmlios (1),
+.BR vim (1),
+.BR curl (1)
