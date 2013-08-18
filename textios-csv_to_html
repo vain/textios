@@ -191,14 +191,19 @@ for row in reader:
     if statusfilters and status not in statusfilters:
         continue
 
-    filtered.append((host, service, statusmapping[status.lower()], detail))
+    attempts = row[5].split('/')
+    soft = row[2] != 'OK' and attempts[0] != attempts[1]
+    soft = 1 if soft else 0
 
-filtered = sorted(filtered, key=itemgetter(2, 0, 1))
+    filtered.append((host, service, statusmapping[status.lower()],
+                     soft, detail))
+
+filtered = sorted(filtered, key=itemgetter(3, 2, 0, 1))
 
 bodyclasses = set()
 tablerows = ""
 
-for host, service, numericalstatus, detail in filtered:
+for host, service, numericalstatus, soft, detail in filtered:
     status = statusmappinginv[numericalstatus]
     bodyclasses.add(status)
 
