@@ -3,9 +3,9 @@ textios
 
 Provides access to the most important parts of Icinga and Nagios:
 
-	- Overview of current problems
-	- ACKing problems
-	- Scheduling downtimes (hosts and services)
+ - Overview of current problems
+ - ACKing problems
+ - Scheduling downtimes (hosts and services)
 
 textios uses Vim as its user interfaces. You get a list of services like
 this:
@@ -18,26 +18,37 @@ You can then prefix each line with a command, for example:
 
 	hdown +2 Host down for the next two hours   haj2.config-slave      BACULA-FD PROCESS          OK  PROCS OK: 1 process with command name bacula-fd''   
 
-Do a :wq and you're done.
+Do a `:wqa` and you're done. The `a` in `:wqa` is most probably needed
+because textios will open one Vim window for each of your Icinga/Nagios
+instances.
+
+Note the non-breaking spaces that are used as field separators.
 
 textios uses curl to retrieve data. If you need to specify any
-credentials, do so in your ~/.netrc.
+credentials, do so in your `~/.netrc`.
+
+If you use `set textwidth=72` or similar in your `~/.vimrc`, you'll most
+likely want to have a look at the shipped `textios.vim`: It resets the
+text width to zero (unlimited) for textios. You don't want to wrap lines
+when using textios – this will break everything.
+
+Refer to textios's manpage for a full list of command line options and
+interactive commands.
 
 
 htmlios
 =======
 
-htmlios uses the same configuration as textios (see below). While
-textios is meant for interactive use, htmlios will render HTML files.
-Large fonts. Stuff like that. Suitable for your displaying your
-monitoring in your office.
+htmlios uses the same configuration as textios. While textios is meant
+for interactive use, htmlios will render HTML files. Large fonts. Stuff
+like that. Suitable for your displaying your monitoring in your office.
 
 htmlios is able to do more filtering than textios can:
 
 	htmlios -e host1,host2 -o UPDATES -s WARNING,CRITICAL
 
-"host1" and "host2" will be skipped, only updates will be shown, only
-the states "warning" and "critical" will be shown.
+`host1` and `host2` will be skipped, only updates will be shown, only
+the states `WARNING` and `CRITICAL` will be shown.
 
 htmlios is able to save intermediate CSV output:
 
@@ -61,57 +72,23 @@ You can also combine data from multiple Icinga/Nagios instances:
 
 See? You only need to download your data once.
 
+Refer to htmlios's manpage for a full list of command line options.
+
 
 Configuration
 =============
 
-~/.textiosrc -- a Bash snippet -- is sourced by textios. It defines one
-array:
-
-	monitors=(
-		monitorlabel
-		type
-		status_url
-		cmd_url
-
-		anothermonitor
-		type
-		status_url
-		cmd_url
-
-		...
-	)
-
-"monitorlabel" can be set to anything, like the name of the location
-that is monitored by this Icinga/Nagios instance. You can later filter
-using these labels: "textios [...] 'monitorlabel anothermonitor foobar'"
-
-"type" can be "icinga" or "nagios".
-
-"status_url" must be the URL to your status.log (if Nagios) or the URL
-to Icinga's CSV output. This is a sane value for Icinga:
-
-	https://icinga.my-domain.foo/cgi-bin/icinga/status.cgi?host=all&type=detail&servicestatustypes=31&nostatusheader&csvoutput&serviceprops=10&hostprops=10'
-
-As you can see, some filtering can be done using this URL.
-
-"cmd_url" must point to your cmd.cgi, e.g.:
-
-	https://icinga.my-domain.foo/cgi-bin/icinga/cmd.cgi
-
-As textios uses curl to retrieve and send data, you must store your
-login credentials in your ~/.netrc.
+See `man textiosrc`.
 
 
 Disclaimer
 ==========
 
 These tools fit my needs. They are not universal tools that will please
-everyone -- and they never will be.
+everyone – and they never will be.
 
 
 TODOs
 =====
 
 - Use Icinga's REST API
-- Better documentation
