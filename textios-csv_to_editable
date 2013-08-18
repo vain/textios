@@ -30,5 +30,3 @@ for row in buffered:
         fmt = '%-' + str(buffered_lens[i]) + 's '
         print fmt % row[i],
     print
-
-# vim: set et sta ts=4 sw=4 :

@@ -113,5 +113,3 @@ for line in sys.stdin.readlines():
             ret = subprocess.call(curlcmd, stdout=fp)
             if ret != 0:
                 sys.stderr.write('Failed, curl error {}\n'.format(ret))
-
-# vim: set et sta ts=4 sw=4 :

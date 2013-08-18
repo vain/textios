@@ -221,5 +221,3 @@ print(html.substitute(
     title=title,
     tablerows=tablerows,
 ))
-
-# vim: set et sta ts=4 sw=4 :
