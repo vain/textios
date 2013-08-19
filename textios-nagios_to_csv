@@ -62,7 +62,7 @@ BEGIN {
 /^\t}/ {
 	if (host_name != "" && !(host_name in hosts_downtime)) {
 		print "'" host_name "';'" service_description "';'" \
-			  current_state "';'_';'_';'" \
-			  current_attempt "/" max_attempts "';'" plugin_output "'"
+		      current_state "';'_';'_';'" \
+		      current_attempt "/" max_attempts "';'" plugin_output "'"
 	}
 }
