@@ -48,6 +48,7 @@ BEGIN {
 
 /^\tscheduled_downtime_depth/ {
 	if ($2 != 0) {
+		hosts_downtime[host_name] = 1
 		host_name = ""
 	}
 }
@@ -59,7 +60,7 @@ BEGIN {
 }
 
 /^\t}/ {
-	if (host_name != "") {
+	if (host_name != "" && !(host_name in hosts_downtime)) {
 		print "'" host_name "';'" service_description "';'" \
 			  current_state "';'_';'_';'" \
 			  current_attempt "/" max_attempts "';'" plugin_output "'"
