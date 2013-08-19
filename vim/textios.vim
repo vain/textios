@@ -1,1 +1,1 @@
-au BufRead,BufNewFile /tmp/textios-* set tw=0
+au BufRead,BufNewFile /tmp/textios-* set tw=0 nowrap
