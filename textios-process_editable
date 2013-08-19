@@ -23,7 +23,7 @@ for line in sys.stdin.readlines():
     m = re.search(r'^ack( (.*))?', cmd, re.I)
     if m:
         comment = m.group(2) or 'Acknowledged'
-        print 'ack {} on {}'.format(service, host)
+        print 'ack {} on {}: "{}"'.format(service, host, comment)
         curlcmd = ['curl', '-nsLk', '--fail', url,
                    '--data', 'cmd_typ=34',
                    '--data', 'cmd_mod=2',
@@ -83,7 +83,8 @@ for line in sys.stdin.readlines():
         starttime = datetime.datetime.now().strftime('%F %T')
 
         if host_downtime:
-            print 'host downtime for {}'.format(host)
+            print 'host downtime for {} until {} {}: "{}"'.format(host,
+                                                            date, time, comment)
             curlcmd = [
                        'curl', '-nsLk', '--fail', url,
                        '--data', 'cmd_typ=55',
@@ -96,7 +97,8 @@ for line in sys.stdin.readlines():
                        '--data', 'fixed=1',
                       ]
         else:
-            print 'service downtime for {} on {}'.format(service, host)
+            print 'service downtime for {} on {} until {} {}: "{}"'.format(
+                                             service, host, date, time, comment)
             curlcmd = [
                        'curl', '-nsLk', '--fail', url,
                        '--data', 'cmd_typ=56',
