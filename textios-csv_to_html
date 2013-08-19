@@ -109,13 +109,13 @@ html = Template("""<!DOCTYPE html>
     }
     tr.warning.detail { background: #e5bf16; }
     tr.warningsoft {
-        background: #ffe366;
-        background: -moz-linear-gradient(top,  #ffe366 0%, #e5cc5c 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffe366), color-stop(100%,#e5cc5c));
-        background: -webkit-linear-gradient(top,  #ffe366 0%,#e5cc5c 100%);
-        background: linear-gradient(to bottom,  #ffe366 0%,#e5cc5c 100%);
+        background: #ccb652;
+        background: -moz-linear-gradient(top,  #ccb652 0%, #ccbd7a 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccb652), color-stop(100%,#ccbd7a));
+        background: -webkit-linear-gradient(top,  #ccb652 0%,#ccbd7a 100%);
+        background: linear-gradient(to bottom,  #ccb652 0%,#ccbd7a 100%);
     }
-    tr.warningsoft.detail { background: #e5cc5c; }
+    tr.warningsoft.detail { background: #ccbd7a; }
     tr.critical {
         background: #ff0000;
         background: -moz-linear-gradient(top,  #ff0000 0%, #d30000 100%);
