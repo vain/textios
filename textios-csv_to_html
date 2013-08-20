@@ -100,6 +100,10 @@ html = Template("""<!DOCTYPE html>
         animation-name: smiley;
     }
     tr { width: 100%; text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.4); }
+    tr.soft td {
+          background: rgba(255, 255, 255, 0.2);
+          text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.2);
+    }
     tr.warning {
         background: #ffd519;
         background: -moz-linear-gradient(top,  #ffd519 0%, #e5bf16 100%);
@@ -108,14 +112,8 @@ html = Template("""<!DOCTYPE html>
         background: linear-gradient(to bottom,  #ffd519 0%,#e5bf16 100%);
     }
     tr.warning.detail { background: #e5bf16; }
-    tr.warning.soft {
-        background: #ccb652;
-        background: -moz-linear-gradient(top,  #ccb652 0%, #ccbd7a 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccb652), color-stop(100%,#ccbd7a));
-        background: -webkit-linear-gradient(top,  #ccb652 0%,#ccbd7a 100%);
-        background: linear-gradient(to bottom,  #ccb652 0%,#ccbd7a 100%);
-    }
-    tr.warning.soft.detail { background: #ccbd7a; }
+    tr.warning.soft { color: #A68700; }
+    tr.warning.soft.detail { color: #A68700; }
     tr.critical {
         background: #ff0000;
         background: -moz-linear-gradient(top,  #ff0000 0%, #d30000 100%);
@@ -124,14 +122,8 @@ html = Template("""<!DOCTYPE html>
         background: linear-gradient(to bottom,  #ff0000 0%,#d30000 100%);
     }
     tr.critical.detail { background: #d30000; }
-    tr.critical.soft {
-        background: #ff4d4d;
-        background: -moz-linear-gradient(top,  #ff4d4d 0%, #d33f3f 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff4d4d), color-stop(100%,#d33f3f));
-        background: -webkit-linear-gradient(top,  #ff4d4d 0%,#d33f3f 100%);
-        background: linear-gradient(to bottom,  #ff4d4d 0%,#d33f3f 100%);
-    }
-    tr.critical.soft.detail { background: #d33f3f; }
+    tr.critical.soft { color: #8C0000; }
+    tr.critical.soft.detail { color: #8C0000; }
     tr.unknown {
         background: #ff32ff;
         background: -moz-linear-gradient(top,  #ff32ff 0%, #cc3dcc 100%);
@@ -140,14 +132,8 @@ html = Template("""<!DOCTYPE html>
         background: linear-gradient(to bottom,  #ff32ff 0%,#cc3dcc 100%);
     }
     tr.unknown.detail { background: #cc3dcc; }
-    tr.unknown.soft {
-        background: #ff80ff;
-        background: -moz-linear-gradient(top,  #ff80ff 0%, #cc7acc 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff80ff), color-stop(100%,#cc7acc));
-        background: -webkit-linear-gradient(top,  #ff80ff 0%,#cc7acc 100%);
-        background: linear-gradient(to bottom,  #ff80ff 0%,#cc7acc 100%);
-    }
-    tr.unknown.soft.detail { background: #cc7acc; }
+    tr.unknown.soft { color: #A800A8; }
+    tr.unknown.soft.detail { color: #A800A8; }
     tr.ok {
         background: #00ff06;
         background: -moz-linear-gradient(top,  #00ff06 0%, #00cc00 100%);
@@ -156,6 +142,8 @@ html = Template("""<!DOCTYPE html>
         background: linear-gradient(to bottom,  #00ff06 0%,#00cc00 100%);
     }
     tr.ok.detail { background: #00cc00; }
+    tr.ok.soft { color: #00A803; }
+    tr.ok.soft.detail { color: #00A803; }
     td {
         font-size: 60px;
         padding-top: 10px;
