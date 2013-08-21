@@ -54,7 +54,8 @@ BEGIN {
 }
 
 /^\tproblem_has_been_acknowledged=1/ {
-	if ($2 != 0) {
+	# show_acked is a parameter that's only been set by htmlios.
+	if ($2 != 0 && show_acked != 1) {
 		host_name = ""
 	}
 }

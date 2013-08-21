@@ -71,7 +71,8 @@ else
 
 		if [[ ${monitors[$((i + 1))]} == nagios ]]
 		then
-			textios-nagios_to_csv <"$workdir"/data >"$workdir"/nagfilter
+			textios-nagios_to_csv -v show_acked=1 \
+				<"$workdir"/data >"$workdir"/nagfilter
 			mv "$workdir"/{nagfilter,data}
 		fi
 
