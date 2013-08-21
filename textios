@@ -47,7 +47,12 @@ do
 					{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-"$suff"
 				ret=${PIPESTATUS[0]}
-				(( ret != 0 )) && echo "$suff failed, curl error $ret" >&2
+				if (( ret == 0 ))
+				then
+					echo "$suff finished"
+				else
+					echo "$suff failed, curl error $ret" >&2
+				fi
 			) &
 			;;
 		nagios)
@@ -58,7 +63,12 @@ do
 					{ (( onlyhosts )) && textios-onlyhosts || cat; } \
 					>/tmp/textios-"$suff"
 				ret=${PIPESTATUS[0]}
-				(( ret != 0 )) && echo "$suff failed, curl error $ret" >&2
+				if (( ret == 0 ))
+				then
+					echo "$suff finished"
+				else
+					echo "$suff failed, curl error $ret" >&2
+				fi
 			) &
 			;;
 	esac
