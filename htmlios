@@ -66,6 +66,7 @@ else
 		if (( ret != 0 ))
 		then
 			echo "htmlios: Fetching ${monitors[$i]} failed, curl error $ret" >&2
+			echo "'${monitors[i]}';'FAILED'" >>"$workdir"/final.csv
 			continue
 		fi
 
