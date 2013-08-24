@@ -2,7 +2,8 @@
 
 BEGIN {
 	FS = "="
-	print "'Host';'Service';'Status';'_';'_';'Attempt';'Status_Information'"
+	print "'Host';'Service';'Status';'_';'_';'Attempt';'Status_Information'"\
+	      ";'_';'_';'_';'_';'_';'is_acknowleged'"
 }
 
 /^host/ {
@@ -58,12 +59,15 @@ BEGIN {
 	if ($2 != 0 && show_acked != 1) {
 		host_name = ""
 	}
+	acked = 1
 }
 
 /^\t}/ {
 	if (host_name != "" && !(host_name in hosts_downtime)) {
 		print "'" host_name "';'" service_description "';'" \
 		      current_state "';'_';'_';'" \
-		      current_attempt "/" max_attempts "';'" plugin_output "'"
+		      current_attempt "/" max_attempts "';'" plugin_output \
+		      "';'_';'_';'_';'_';'_';'" (acked == 1 ? "true" : "false") \
+		      "'"
 	}
 }
