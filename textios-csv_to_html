@@ -197,6 +197,7 @@ for row in reader:
     service = row[1]
     status = row[2]
     detail = row[6]
+    acked = row[12].lower() == 'true'
 
     if hostexcludes and host in hostexcludes:
         continue
@@ -215,21 +216,22 @@ for row in reader:
     soft = 1 if soft else 0
 
     filtered.append((host, service, statusmapping[status.lower()],
-                     soft, detail))
+                     soft, detail, acked))
 
 filtered = sorted(filtered, key=itemgetter(3, 2, 0, 1))
 
 bodyclasses = set()
 tablerows = ""
 
-for host, service, numericalstatus, soft, detail in filtered:
+for host, service, numericalstatus, soft, detail, acked in filtered:
     status = statusmappinginv[numericalstatus]
     hardness = "soft" if soft else "hard"
+    acked = '✓' if acked else ''
     bodyclasses.add(status)
 
     tablerows += (
         '<tr class="{status} {hardness}">'
-        '<td class="host">{host}</td>'
+        '<td class="host">{acked} {host}</td>'
         '<td class="service">{service}</td>'
         '</tr>\n'
         '<tr class="detail {status} {hardness}">'
@@ -240,6 +242,7 @@ for host, service, numericalstatus, soft, detail in filtered:
         host=host.replace('-', '&#8209;'),
         service=service,
         detail=detail,
+        acked=acked,
     )
 
 print(html.substitute(
