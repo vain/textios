@@ -173,7 +173,7 @@ servicesonly = [i for i in sys.argv[2].split(',') if i != '']
 servicesexcluded = [i for i in sys.argv[3].split(',') if i != '']
 statusfilters = [i for i in sys.argv[4].split(',') if i != '']
 title = sys.argv[5]
-title = '<div class="title">{}</div>'.format(title) if title else ""
+title = '<div class="title">{}</div>'.format(title) if title else ''
 
 reader = csv.reader(sys.stdin, delimiter=';', quotechar="'")
 filtered = []
@@ -221,11 +221,11 @@ for row in reader:
 filtered = sorted(filtered, key=itemgetter(3, 2, 0, 1))
 
 bodyclasses = set()
-tablerows = ""
+tablerows = ''
 
 for host, service, numericalstatus, soft, detail, acked in filtered:
     status = statusmappinginv[numericalstatus]
-    hardness = "soft" if soft else "hard"
+    hardness = 'soft' if soft else 'hard'
     acked = '✓' if acked else ''
     bodyclasses.add(status)
 
@@ -246,7 +246,7 @@ for host, service, numericalstatus, soft, detail, acked in filtered:
     )
 
 print(html.substitute(
-    bodyclasses=" ".join(bodyclasses),
+    bodyclasses=' '.join(bodyclasses),
     title=title,
     tablerows=tablerows,
 ))
