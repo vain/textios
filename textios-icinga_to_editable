@@ -40,8 +40,8 @@ for host in info_hosts['status']['host_status']:
     row = [
            host['host_display_name'],
            host['status'],
-           '',
-           '',
+           ' ',
+           ' ',
           ]
     buffered.append(row)
 
