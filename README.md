@@ -27,17 +27,14 @@ Note the non-breaking spaces that are used as field separators.
 textios uses curl to retrieve data. If you need to specify any
 credentials, do so in your `~/.netrc`.
 
-If you use `set textwidth=72` or similar in your `~/.vimrc`, you'll most
-likely want to have a look at the shipped `textios.vim`: It resets the
-text width to zero (unlimited) for textios. You don't want to wrap lines
-when using textios – this will break everything.
-
 Refer to textios's manpage for a full list of command line options and
 interactive commands.
 
 
 htmlios
 =======
+
+*htmlios is currently broken*
 
 htmlios uses the same configuration as textios. While textios is meant
 for interactive use, htmlios will render HTML files. Large fonts. Stuff
@@ -86,9 +83,3 @@ Disclaimer
 
 These tools fit my needs. They are not universal tools that will please
 everyone – and they never will be.
-
-
-TODOs
-=====
-
-- Use Icinga's REST API
