@@ -14,17 +14,18 @@ only_hosts=0
 show_soft=0
 show_acked=0
 show_downtime=0
-while getopts awHhSAD name
+while getopts awhSAD name
 do
 	case $name in
 		a)
 			filters_service=
+			filters_host=
+			show_soft=1
+			show_acked=1
+			show_downtime=1
 			;;
 		w)
 			filters_service='WARNING,CRITICAL,UNKNOWN'
-			;;
-		H)
-			filters_host=
 			;;
 		h)
 			only_hosts=1
