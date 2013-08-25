@@ -86,5 +86,5 @@ for row in buffered:
     print ' ',
     for i in range(len(row)):
         # nbsp at the end of the line:
-        print ('{:' + str(buffered_lens[i]) + '} ').format(row[i]),
+        print ('{:' + str(buffered_lens[i]) + '} ').format(row[i].encode('UTF-8')),
     print

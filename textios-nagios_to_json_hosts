@@ -1,0 +1,82 @@
+#!/usr/bin/awk -f
+
+BEGIN {
+	FS = "="
+	print "{\"status\":{\"host_status\":["
+}
+
+/^host/ {
+	in_correct_block = 1
+}
+
+/^\thost_name/ {
+	host_name = $2
+}
+
+/^\tstate_type/ {
+	switch ($2) {
+		case 0:
+			state_type = "SOFT"
+			break
+		case 1:
+			state_type = "HARD"
+			break
+	}
+}
+
+/^\tcurrent_state/ {
+	switch ($2) {
+		case 0:
+			current_state = "UP"
+			break
+		case 1:
+			current_state = "DOWN"
+			break
+		case 2:
+			current_state = "UNREACHABLE"
+			break
+	}
+}
+
+/^\tscheduled_downtime_depth/ {
+	if ($2 != 0) {
+		downtime = 1
+	}
+}
+
+/^\tproblem_has_been_acknowledged/ {
+	if ($2 != 0) {
+		acked = 1
+	}
+}
+
+/^\t}/ {
+	if (in_correct_block == 1) {
+		if (first == 0) {
+			first = 1
+		}
+		else {
+			printf ","
+		}
+
+		printf "{"\
+		       "\"host_name\": \"%s\", \"host_display_name\": \"%s\"" \
+		       ", \"status\": \"%s\"" \
+		       ", \"state_type\": \"%s\"" \
+		       ", \"in_scheduled_downtime\": %s" \
+		       ", \"has_been_acknowledged\": %s" \
+		       "}\n", host_name, host_name, \
+		       current_state, \
+		       state_type, \
+		       (downtime == 1 ? "true" : "false"), \
+		       (acked == 1 ? "true" : "false")
+
+		downtime = 0
+		acked = 0
+		in_correct_block = 0
+	}
+}
+
+END {
+	print "]}}"
+}

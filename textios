@@ -51,13 +51,13 @@ do
 		[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
 	printf -v suff '%02d-%s' "$i" "${monitors[$i]}"
 	echo "Fetching $suff..."
+	url=${monitors[$((i + 2))]}
 	case ${monitors[$((i + 1))]} in
 		icinga)
 			(
 				workdir=$(mktemp -d)
 				(
 					cd "$workdir"
-					url=${monitors[$((i + 2))]}
 					(
 						curl --fail --compressed -nsLk \
 							"$url/?style=hostdetail&jsonoutput" \
@@ -71,7 +71,7 @@ do
 							echo "Could not fetch services: $url" >&2
 					) &
 					wait
-					textios-icinga_to_editable \
+					textios-json_to_editable \
 						"$filters_service" \
 						"$filters_host" \
 						"$only_hosts" \
@@ -85,8 +85,24 @@ do
 			;;
 		nagios)
 			(
-				echo "NAGIOS CURRENTLY NOT SUPPORTED" >&2
-				touch /tmp/textios-"$suff"
+				workdir=$(mktemp -d)
+				(
+					cd "$workdir"
+					curl --fail --compressed -nsLk \
+						"$url" >status.dat ||
+						echo "Could not fetch status.dat: $url" >&2
+					textios-nagios_to_json_hosts <status.dat >hosts.json
+					textios-nagios_to_json_services <status.dat >services.json
+					textios-json_to_editable \
+						"$filters_service" \
+						"$filters_host" \
+						"$only_hosts" \
+						"$show_soft" \
+						"$show_acked" \
+						"$show_downtime" \
+						>/tmp/textios-"$suff"
+				)
+				rm -Rf "$workdir"
 			) &
 			;;
 	esac
