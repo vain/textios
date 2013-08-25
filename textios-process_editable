@@ -16,6 +16,7 @@ for line in sys.stdin.readlines():
     cmd = tokens[0]
     host = tokens[1]
     service = tokens[2]
+    is_host = tokens[3].strip() == ''
 
     # Allowed commands:
     #  ack
@@ -23,17 +24,29 @@ for line in sys.stdin.readlines():
     m = re.search(r'^ack( (.*))?', cmd, re.I)
     if m:
         comment = m.group(2) or 'Acknowledged'
-        print 'ack {} on {}: "{}"'.format(service, host, comment)
-        curlcmd = ['curl', '-nsLk', '--fail', url,
-                   '--data', 'cmd_typ=34',
-                   '--data', 'cmd_mod=2',
-                   '--data', 'com_author={}'.format(getpass.getuser()),
-                   '--data', 'host={}'.format(host),
-                   '--data', 'service={}'.format(service),
-                   '--data', 'com_data={}'.format(comment),
-                   '--data', 'sticky_ack=1',
-                   '--data', 'send_notification=1',
-                   '--data', 'persistent=1']
+        if is_host:
+            print 'ack host problem on {}: "{}"'.format(host, comment)
+            curlcmd = ['curl', '-nsLk', '--fail', url,
+                       '--data', 'cmd_typ=33',
+                       '--data', 'cmd_mod=2',
+                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'host={}'.format(host),
+                       '--data', 'com_data={}'.format(comment),
+                       '--data', 'sticky_ack=1',
+                       '--data', 'send_notification=1',
+                       '--data', 'persistent=1']
+        else:
+            print 'ack {} on {}: "{}"'.format(service, host, comment)
+            curlcmd = ['curl', '-nsLk', '--fail', url,
+                       '--data', 'cmd_typ=34',
+                       '--data', 'cmd_mod=2',
+                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'host={}'.format(host),
+                       '--data', 'service={}'.format(service),
+                       '--data', 'com_data={}'.format(comment),
+                       '--data', 'sticky_ack=1',
+                       '--data', 'send_notification=1',
+                       '--data', 'persistent=1']
         with open('/dev/null', 'w') as fp:
             ret = subprocess.call(curlcmd, stdout=fp)
             if ret != 0:
