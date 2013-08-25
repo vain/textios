@@ -56,9 +56,6 @@ if not only_hosts:
         if not show_acked and service['has_been_acknowledged']:
             continue
 
-        if not show_downtime and service['in_scheduled_downtime']:
-            continue
-
         if not show_downtime and (
                 service['host_name'] in hosts_downtime or
                 service['in_scheduled_downtime']
