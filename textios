@@ -14,7 +14,8 @@ only_hosts=0
 show_soft=0
 show_acked=0
 show_downtime=0
-while getopts awhSAD name
+only_copy_to=
+while getopts awhSADc: name
 do
 	case $name in
 		a)
@@ -39,12 +40,15 @@ do
 		D)
 			show_downtime=1
 			;;
+		c)
+			only_copy_to=$OPTARG
+			;;
 	esac
 done
 shift $((OPTIND - 1))
 labels=" $1 "
 
-rm -f /tmp/textios-*
+[[ -z $only_copy_to ]] && rm -f /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
@@ -72,14 +76,20 @@ do
 							echo "Could not fetch services: $url" >&2
 					) &
 					wait
-					textios-json_to_editable \
-						"$filters_service" \
-						"$filters_host" \
-						"$only_hosts" \
-						"$show_soft" \
-						"$show_acked" \
-						"$show_downtime" \
-						>/tmp/textios-"$suff"
+					if [[ -n $only_copy_to ]]
+					then
+						mkdir -p "$only_copy_to"/"${monitors[$i]}"
+						cp * "$only_copy_to"/"${monitors[$i]}"
+					else
+						textios-json_to_editable \
+							"$filters_service" \
+							"$filters_host" \
+							"$only_hosts" \
+							"$show_soft" \
+							"$show_acked" \
+							"$show_downtime" \
+							>/tmp/textios-"$suff"
+					fi
 				)
 				rm -Rf "$workdir"
 			) &
@@ -94,14 +104,20 @@ do
 						echo "Could not fetch status.dat: $url" >&2
 					textios-nagios_to_json_hosts <status.dat >hosts.json
 					textios-nagios_to_json_services <status.dat >services.json
-					textios-json_to_editable \
-						"$filters_service" \
-						"$filters_host" \
-						"$only_hosts" \
-						"$show_soft" \
-						"$show_acked" \
-						"$show_downtime" \
-						>/tmp/textios-"$suff"
+					if [[ -n $only_copy_to ]]
+					then
+						mkdir -p "$only_copy_to"/"${monitors[$i]}"
+						cp * "$only_copy_to"/"${monitors[$i]}"
+					else
+						textios-json_to_editable \
+							"$filters_service" \
+							"$filters_host" \
+							"$only_hosts" \
+							"$show_soft" \
+							"$show_acked" \
+							"$show_downtime" \
+							>/tmp/textios-"$suff"
+					fi
 				)
 				rm -Rf "$workdir"
 			) &
@@ -110,6 +126,7 @@ do
 done
 
 wait
+[[ -n $only_copy_to ]] && exit
 vim -c 'set tw=0 nowrap' -o /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
