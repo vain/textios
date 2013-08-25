@@ -41,11 +41,11 @@ monitoring in your office.
 htmlios won't download any information. Instead, there's a special
 switch for textios to save its internal data:
 
-	textios -a -c /tmp/textios-data
+	textios -a -c /tmp/raw-textios-data
 
-This creates a directory `/tmp/textios-data` and, for each location, a
-subdirectory. Actually, you don't need to know the gory details. htmlios
-will simply pick up that data.
+This creates a directory `/tmp/raw-textios-data` and, for each location,
+a subdirectory. Actually, you don't need to know the gory details.
+htmlios will simply pick up that data.
 
 After you've downloaded that stuff, htmlios renders your html pages:
 

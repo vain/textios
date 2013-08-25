@@ -35,7 +35,7 @@ them.
 .TP
 .B \-i \fIPATH\fP
 Location where \fBtextios\fP stored its data. Defaults to
-\fI/tmp/textios-data\fP.
+\fI/tmp/raw-textios-data\fP.
 .P
 After these options, you must specify one or more locations separated by
 spaces. For example, if you've configured the locations \(lqffm\(rq,
@@ -55,7 +55,7 @@ files from it:
 .P
 .nf
 \f(CW
-\&	textios -a -c /tmp/textios-data
+\&	textios -a -c /tmp/raw-textios-data
 \&
 \&	htmlios -E UPDATES -t 'Office' office >office.html
 \&	htmlios -E UPDATES -t 'Colo' colo >colo.html

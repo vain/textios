@@ -174,7 +174,7 @@ parser.add_argument('-e', '--exclude_hosts', nargs='+', default=[])
 parser.add_argument('-E', '--exclude_services', nargs='+', default=[])
 parser.add_argument('-o', '--only_services', nargs='+', default=[])
 parser.add_argument('-t', '--title')
-parser.add_argument('-i', '--input', default='/tmp/textios-data')
+parser.add_argument('-i', '--input', default='/tmp/raw-textios-data')
 parser.add_argument('location', nargs='+')
 args = parser.parse_args()
 
