@@ -79,7 +79,7 @@ do
 					if [[ -n $only_copy_to ]]
 					then
 						mkdir -p "$only_copy_to"/"${monitors[$i]}"
-						cp * "$only_copy_to"/"${monitors[$i]}"
+						cp -R * "$only_copy_to"/"${monitors[$i]}"
 					else
 						textios-json_to_editable \
 							"$filters_service" \
@@ -107,7 +107,7 @@ do
 					if [[ -n $only_copy_to ]]
 					then
 						mkdir -p "$only_copy_to"/"${monitors[$i]}"
-						cp * "$only_copy_to"/"${monitors[$i]}"
+						cp -R * "$only_copy_to"/"${monitors[$i]}"
 					else
 						textios-json_to_editable \
 							"$filters_service" \
