@@ -211,6 +211,8 @@ for l in args.location:
     for host in info_hosts['status']['host_status']:
         if host['in_scheduled_downtime']:
             hosts_downtime.add(host['host_name'])
+
+        if host['host_name'] in hosts_downtime:
             continue
 
         if args.only_services:
