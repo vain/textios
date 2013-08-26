@@ -7,6 +7,15 @@ import datetime
 import subprocess
 import getpass
 
+def comment_quote(comment):
+    if comment.lower() not in ['q', 'quote']:
+        return comment
+    else:
+        try:
+            return subprocess.check_output(['random-quote']).strip()
+        except:
+            return comment
+
 url = sys.argv[1]
 
 for line in sys.stdin.readlines():
@@ -24,6 +33,7 @@ for line in sys.stdin.readlines():
     m = re.search(r'^ack( (.*))?', cmd, re.I)
     if m:
         comment = m.group(2) or 'Acknowledged'
+        comment = comment_quote(comment)
         if is_host:
             print 'ack host problem on {}: "{}"'.format(host, comment)
             curlcmd = ['curl', '-nsLk', '--fail', url,
@@ -93,6 +103,7 @@ for line in sys.stdin.readlines():
             time = added.strftime('%H:%M:00')
 
         comment = m.group(6) or 'Scheduled Downtime'
+        comment = comment_quote(comment)
         starttime = datetime.datetime.now().strftime('%F %T')
 
         if host_downtime:
