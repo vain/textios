@@ -252,16 +252,16 @@ tablerows = ''
 for host, service, numericalstatus, soft, detail, acked in buffered:
     status = statusmappinginv[numericalstatus]
     hardness = u'soft' if soft else u'hard'
-    acked = u'✓' if acked else u''
+    acked = u'ACKNOWLEDGED' if acked else u''
     bodyclasses.add(status)
 
     tablerows += (
         u'<tr class="{status} {hardness}">'
-        u'<td class="host">{acked} {host}</td>'
+        u'<td class="host">{host}</td>'
         u'<td class="service">{service}</td>'
         u'</tr>\n'
         u'<tr class="detail {status} {hardness}">'
-        u'<td></td><td>{detail}</td></tr>'
+        u'<td>{acked}</td><td>{detail}</td></tr>'
     ).format(
         status=status,
         hardness=hardness,
