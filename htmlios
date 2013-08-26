@@ -213,6 +213,13 @@ for l in args.location:
             hosts_downtime.add(host['host_name'])
             continue
 
+        if args.only_services:
+            # This is a bit misleading. The "if" does not check if we're
+            # to show *only services* -- it checks if we're to show only
+            # *CERTAIN* services. A host check is never a service check.
+            # Thus, with "-o", we must never show any host problems.
+            continue
+
         if host['status'].lower() in ['up', 'pending']:
             continue
 
