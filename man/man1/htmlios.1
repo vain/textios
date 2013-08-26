@@ -70,8 +70,12 @@ loop:
 \f(CW
 \&	while sleep 30
 \&	do
+\&		textios -a -c /tmp/raw-textios-data
+\&
 \&		htmlios ... > status.new.html
 \&		mv status.new.html status.html
+\&
+\&		rm -Rf /tmp/raw-textios-data
 \&	done
 \fP
 .fi
