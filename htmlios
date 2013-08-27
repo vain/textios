@@ -199,6 +199,7 @@ for l in args.location:
     if l == 'NONE':
         continue
 
+    failed = False
     try:
         with open('{}/{}/hosts.json'.format(args.input, l), 'r') as fp:
             info_hosts = json.load(fp)
@@ -206,6 +207,12 @@ for l in args.location:
         with open('{}/{}/services.json'.format(args.input, l), 'r') as fp:
             info_services = json.load(fp)
     except:
+        failed = True
+
+    if not 'status' in info_hosts.keys() or not 'status' in info_services.keys():
+        failed = True
+
+    if failed:
         buffered.append((l, 'FAILED', statusmapping['failed'], False,
                          'Unable to read textios data.', False))
         continue
