@@ -1,0 +1,87 @@
+#!/usr/bin/env python2
+# coding: utf-8
+
+import json
+import sys
+
+filters_service = [i for i in sys.argv[1].split(',') if i != '']
+filters_host = [i for i in sys.argv[2].split(',') if i != '']
+only_hosts = sys.argv[3] == '1'
+show_soft = sys.argv[4] == '1'
+show_acked = sys.argv[5] == '1'
+show_downtime = sys.argv[6] == '1'
+
+info_hosts = None
+info_services = None
+
+with open('hosts.json', 'r') as fp:
+    info_hosts = json.load(fp)
+
+with open('services.json', 'r') as fp:
+    info_services = json.load(fp)
+
+buffered = []
+hosts_downtime = set()
+for host in info_hosts['status']['host_status']:
+    if host['in_scheduled_downtime']:
+        hosts_downtime.add(host['host_name'])
+        if not show_downtime:
+            continue
+
+    if filters_host and not host['status'] in filters_host:
+        continue
+
+    if not show_soft and host['state_type'] == 'SOFT':
+        continue
+
+    if not show_acked and host['has_been_acknowledged']:
+        continue
+
+    row = [
+           host['host_display_name'],
+           host['status'],
+           ' ',
+           ' ',
+          ]
+    buffered.append(row)
+
+if not only_hosts:
+    for service in info_services['status']['service_status']:
+        if filters_service and not service['status'] in filters_service:
+            continue
+
+        if not show_soft and service['state_type'] == 'SOFT':
+            continue
+
+        if not show_acked and service['has_been_acknowledged']:
+            continue
+
+        if not show_downtime and (
+                service['host_name'] in hosts_downtime or
+                service['in_scheduled_downtime']
+                ):
+            continue
+
+        row = [
+               service['host_display_name'],
+               service['service_display_name'],
+               service['status'],
+               service['status_information'].replace('\n', ' '),
+              ]
+        buffered.append(row)
+
+buffered_lens = {}
+for row in buffered:
+    for i in range(len(row)):
+        if i in buffered_lens:
+            buffered_lens[i] = max(buffered_lens[i], len(row[i]))
+        else:
+            buffered_lens[i] = len(row[i])
+
+for row in buffered:
+    # nbsp:
+    print ' ',
+    for i in range(len(row)):
+        # nbsp at the end of the line:
+        print ('{:' + str(buffered_lens[i]) + '} ').format(row[i].encode('UTF-8')),
+    print

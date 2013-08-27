@@ -8,30 +8,47 @@ fi
 
 . ~/.textiosrc
 
-filters='CRITICAL,UNKNOWN'
-onlyhosts=0
-softstates=0
-while getopts awhs name
+filters_service='CRITICAL,UNKNOWN'
+filters_host='DOWN,UNREACHABLE'
+only_hosts=0
+show_soft=0
+show_acked=0
+show_downtime=0
+only_copy_to=
+while getopts awhSADc: name
 do
 	case $name in
 		a)
-			filters=
+			filters_service=
+			filters_host=
+			show_soft=1
+			show_acked=1
+			show_downtime=1
 			;;
 		w)
-			filters='WARNING,CRITICAL,UNKNOWN'
+			filters_service='WARNING,CRITICAL,UNKNOWN'
 			;;
 		h)
-			onlyhosts=1
+			only_hosts=1
 			;;
-		s)
-			softstates=1
+		S)
+			show_soft=1
+			;;
+		A)
+			show_acked=1
+			;;
+		D)
+			show_downtime=1
+			;;
+		c)
+			only_copy_to=$OPTARG
 			;;
 	esac
 done
 shift $((OPTIND - 1))
 labels=" $1 "
 
-rm -f /tmp/textios-*
+[[ -z $only_copy_to ]] && rm -f /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
@@ -39,42 +56,77 @@ do
 		[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
 	printf -v suff '%02d-%s' "$i" "${monitors[$i]}"
 	echo "Fetching $suff..."
+	url=${monitors[$((i + 2))]}
 	case ${monitors[$((i + 1))]} in
 		icinga)
 			(
-				curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
-					sed 1d | textios-csv_to_editable "$filters" "$softstates" |
-					{ (( onlyhosts )) && textios-onlyhosts || cat; } \
-					>/tmp/textios-"$suff"
-				ret=${PIPESTATUS[0]}
-				if (( ret == 0 ))
-				then
-					echo "$suff finished"
-				else
-					echo "$suff failed, curl error $ret" >&2
-				fi
+				workdir=$(mktemp -d)
+				(
+					cd "$workdir"
+					(
+						curl --fail --compressed -nsLk \
+							"$url/?style=hostdetail&jsonoutput" \
+							>hosts.json ||
+							echo "Could not fetch hosts: $url" >&2
+					) &
+					(
+						curl --fail --compressed -nsLk \
+							"$url/?host=all&style=detail&jsonoutput" \
+							>services.json ||
+							echo "Could not fetch services: $url" >&2
+					) &
+					wait
+					if [[ -n $only_copy_to ]]
+					then
+						mkdir -p "$only_copy_to"/"${monitors[$i]}"
+						cp -R * "$only_copy_to"/"${monitors[$i]}"
+					else
+						textios-json_to_editable \
+							"$filters_service" \
+							"$filters_host" \
+							"$only_hosts" \
+							"$show_soft" \
+							"$show_acked" \
+							"$show_downtime" \
+							>/tmp/textios-"$suff"
+					fi
+				)
+				rm -Rf "$workdir"
 			) &
 			;;
 		nagios)
 			(
-				curl --fail --compressed -nsLk "${monitors[$((i + 2))]}" |
-					textios-nagios_to_csv |
-					sed 1d | textios-csv_to_editable "$filters" "$softstates" |
-					{ (( onlyhosts )) && textios-onlyhosts || cat; } \
-					>/tmp/textios-"$suff"
-				ret=${PIPESTATUS[0]}
-				if (( ret == 0 ))
-				then
-					echo "$suff finished"
-				else
-					echo "$suff failed, curl error $ret" >&2
-				fi
+				workdir=$(mktemp -d)
+				(
+					cd "$workdir"
+					curl --fail --compressed -nsLk \
+						"$url" >status.dat ||
+						echo "Could not fetch status.dat: $url" >&2
+					textios-nagios_to_json_hosts <status.dat >hosts.json
+					textios-nagios_to_json_services <status.dat >services.json
+					if [[ -n $only_copy_to ]]
+					then
+						mkdir -p "$only_copy_to"/"${monitors[$i]}"
+						cp -R * "$only_copy_to"/"${monitors[$i]}"
+					else
+						textios-json_to_editable \
+							"$filters_service" \
+							"$filters_host" \
+							"$only_hosts" \
+							"$show_soft" \
+							"$show_acked" \
+							"$show_downtime" \
+							>/tmp/textios-"$suff"
+					fi
+				)
+				rm -Rf "$workdir"
 			) &
 			;;
 	esac
 done
 
 wait
+[[ -n $only_copy_to ]] && exit
 vim -c 'set tw=0 nowrap' -o /tmp/textios-*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))

@@ -4,79 +4,62 @@
 htmlios \- render monitoring information as HTML
 .\" -------------------------------------------------------------------
 .SH SYNOPSIS
-\fBhtmlios\fP [\fIOPTION...\fP] [\fILOCATIONS\fP]
+\fBhtmlios\fP [\fIOPTION...\fP] \fILOCATION\fP [\fILOCATION...\fP]
 .\" -------------------------------------------------------------------
 .SH DESCRIPTION
 \fBhtmlios\fP is meant to render monitoring information of one or more
 Icinga/Nagios instances as HTML files.
 .P
-\fBhtmlios\fP is a non-interactive tool. It fetches the information
-using \fBcurl\fP(1), renders a HTML file and then quits. It supports way
-more filtering than \fBtextios\fP(1) does.
+\fBhtmlios\fP is a non-interactive tool. It works on the information
+downloaded by \fBtextios\fP(1), renders a HTML file and then quits. It
+supports way more filtering than \fBtextios\fP(1) does.
 .\" -------------------------------------------------------------------
 .SH OPTIONS
-By default, \fBhtmlios\fP will fetch the informations of all your
-locations and renders one single HTML file (\fI/tmp/htmlios.html\fP).
-You can alter that behaviour as follows.
-.TP
-.B \-O \fIFILE\fP
-Save HTML output as \fIFILE\fP.
-.TP
-.B \-C \fIFILE\fP
-Instead of creating an HTML file, \fBhtmlios\fP will store intermediate
-information in \fIFILE\fP. See the \fBEXAMPLES\fP section and the
-\fB\-c\fP parameter.
-.TP
-.B \-c \fIFILE\fP
-Instead of fetching the current information from your monitoring
-systems, \fBhtmlios\fP will read the intermediate data as saved by
-\fB\-C\fP.
+By default, \fBhtmlios\fP will show all the information that textios has
+downloaded. The HTML file will be written to \fBstdout\fP. You can apply
+several filters as follows.
 .TP
 .B \-t \fITITLE\fP
 Create a title area in the HTML file. This is useful if you're
 monitoring several locations.
 .TP
-.B \-e \fIHOST1\fP,\fIHOST2\fP,\fIHOST3\fP,\fI...\fP
-This will exclude the given hosts. Use commas to separate them.
+.B \-e \fIHOST1\fP \fIHOST2\fP \fIHOST3\fP \fI...\fP
+This will exclude the given hosts. Use spaces to separate them.
 .TP
-.B \-E \fISERVICE1\fP,\fISERVICE2\fP,\fISERVICE3\fP,\fI...\fP
-This will exclude the given services. Use commas to separate them.
+.B \-E \fISERVICE1\fP \fISERVICE2\fP \fISERVICE3\fP \fI...\fP
+This will exclude the given services. Use spaces to separate them.
 .TP
-.B \-o \fISERVICE1\fP,\fISERVICE2\fP,\fISERVICE3\fP,\fI...\fP
+.B \-o \fISERVICE1\fP \fISERVICE2\fP \fISERVICE3\fP \fI...\fP
 This will include \fBonly\fP the given services. Use commas to separate
 them.
 .TP
-.B \-s \fISTATUS1\fP,\fISTATUS2\fP,\fISTATUS3\fP,\fI...\fP
-This will include \fBonly\fP the given statuses. Use commas to separate
-them. Defaults to \fBWARNING,CRITICAL,UNKNOWN\fP.
+.B \-i \fIPATH\fP
+Location where \fBtextios\fP stored its data. Defaults to
+\fI/tmp/raw-textios-data\fP.
 .P
-After these options, you can specify several locations. For example, if
-you've configured the locations \(lqffm\(rq, \(lqber\(rq and
-\(lqnur\(rq, you'd have to use the following command to only display
-information for \(lqffm\(rq and \(lqber\(rq:
+After these options, you must specify one or more locations separated by
+spaces. For example, if you've configured the locations \(lqffm\(rq,
+\(lqber\(rq and \(lqnur\(rq, you'd have to use the following command to
+only display information for \(lqffm\(rq and \(lqber\(rq:
 .P
 .nf
 \f(CW
-\&	$ htmlios 'ffm ber'
+\&	$ htmlios ffm ber
 \fP
 .fi
-.P
-Note: The locations must be given as one single argument.
 .\" -------------------------------------------------------------------
 .SH EXAMPLES
 \fBhtmlios\fP is quite flexible. In particular, it allows you to fetch
-all information once and render multiple HTML files from it:
+all information once (using \fBtextios\fP) and render multiple HTML
+files from it:
 .P
 .nf
 \f(CW
-\&	htmlios -C location1.csv location1
-\&	htmlios -C location2.csv location2
-\&	htmlios -C location3.csv location3
+\&	textios -a -c /tmp/raw-textios-data
 \&
-\&	cat location{1,2,3}.csv >all.csv
-\&
-\&	htmlios -c location1.csv -O location1-everything.html
-\&	htmlios -c all.csv -o UPDATES -O all-updates.html
+\&	htmlios -E UPDATES -t 'Office' office >office.html
+\&	htmlios -E UPDATES -t 'Colo' colo >colo.html
+\&	htmlios -o UPDATES -t 'Updates' office colo >all-updates.html
 \fP
 .fi
 .P
@@ -87,8 +70,12 @@ loop:
 \f(CW
 \&	while sleep 30
 \&	do
-\&		htmlios ... -O status.new.html
+\&		textios -a -c /tmp/raw-textios-data
+\&
+\&		htmlios ... >status.new.html
 \&		mv status.new.html status.html
+\&
+\&		rm -Rf /tmp/raw-textios-data
 \&	done
 \fP
 .fi
@@ -100,9 +87,6 @@ be in the process of refreshing the page. This would lead to a corrupt
 page, probably simply an error message in the browser. Thus, we first
 render the new file and then rename it. On Linux, this is an atomic
 step, so the browser won't complain.
-.\" -------------------------------------------------------------------
-.SH CONFIGURATION
-See \fBtextiosrc\fP(5).
 .\" -------------------------------------------------------------------
 .SH BUGS
 Currently, no bugs are known. If you find one, we invite you to report

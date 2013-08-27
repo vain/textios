@@ -1,0 +1,98 @@
+#!/usr/bin/awk -f
+
+BEGIN {
+	FS = "="
+	print "{\"status\":{\"service_status\":["
+}
+
+/^service/ {
+	in_correct_block = 1
+}
+
+/^\thost_name/ {
+	host_name = $2
+}
+
+/^\tservice_description/ {
+	service_name = $2
+}
+
+/^\tplugin_output/ {
+	status_information = $2
+	gsub(/"/, "'", status_information)
+}
+
+/^\tstate_type/ {
+	switch ($2) {
+		case 0:
+			state_type = "SOFT"
+			break
+		case 1:
+			state_type = "HARD"
+			break
+	}
+}
+
+/^\tcurrent_state/ {
+	switch ($2) {
+		case 0:
+			current_state = "OK"
+			break
+		case 1:
+			current_state = "WARNING"
+			break
+		case 2:
+			current_state = "CRITICAL"
+			break
+		case 3:
+			current_state = "UNKNOWN"
+			break
+	}
+}
+
+/^\tscheduled_downtime_depth/ {
+	if ($2 != 0) {
+		downtime = 1
+	}
+}
+
+/^\tproblem_has_been_acknowledged/ {
+	if ($2 != 0) {
+		acked = 1
+	}
+}
+
+/^\t}/ {
+	if (in_correct_block == 1) {
+		if (first == 0) {
+			first = 1
+		}
+		else {
+			printf ","
+		}
+
+		printf "{"\
+		       "\"host_name\": \"%s\", \"host_display_name\": \"%s\"" \
+		       ", \"service_display_name\": \"%s\"" \
+		       ", \"status\": \"%s\"" \
+		       ", \"state_type\": \"%s\"" \
+		       ", \"in_scheduled_downtime\": %s" \
+		       ", \"has_been_acknowledged\": %s" \
+		       ", \"status_information\": \"%s\"" \
+		       "}\n", host_name, host_name, \
+		       service_name, \
+		       current_state, \
+		       state_type, \
+		       (downtime == 1 ? "true" : "false"), \
+		       (acked == 1 ? "true" : "false"), \
+		       status_information
+
+		downtime = 0
+		acked = 0
+		in_correct_block = 0
+	}
+}
+
+END {
+	print "]}}"
+}

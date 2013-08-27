@@ -21,12 +21,12 @@ It defines exactly one Bash array called \fBmonitors\fP:
 \&	monitors=(
 \&		monitorlabel
 \&		type
-\&		status_url
+\&		status_base_url
 \&		cmd_url
 \&
 \&		anothermonitor
 \&		type
-\&		status_url
+\&		status_base_url
 \&		cmd_url
 \&
 \&		...
@@ -45,26 +45,23 @@ using these labels.
 .I type
 Can be \fBicinga\fP or \fBnagios\fP.
 .TP
-.I status_url
-This must be the URL to your \fIstatus.log\fP (if Nagios) or the URL
-to Icinga's CSV output. This is a sane value for Icinga:
+.I status_base_url
+This must be the URL to your \fIstatus.dat\fP (if Nagios) or the URL
+to Icinga's \fIstatus.cgi\fP:
 
 .nf
 \f(CW
-\&	https://icinga.my-domain.foo/cgi-bin/icinga/status.cgi?\\
-\&	host=all&type=detail&servicestatustypes=31&nostatusheader\\
-\&	&csvoutput&serviceprops=10&hostprops=10
+\&  https://icinga.my-domain.foo/cgi-bin/icinga/status.cgi
 \fP
 .fi
 
-As you can see, some filtering can be done using this URL.
 .TP
 .I cmd_url
 Must point to your \fIcmd.cgi\fP, e.g.:
 
 .nf
 \f(CW
-	https://icinga.my-domain.foo/cgi-bin/icinga/cmd.cgi
+\&  https://icinga.my-domain.foo/cgi-bin/icinga/cmd.cgi
 \fP
 .fi
 .\" -------------------------------------------------------------------

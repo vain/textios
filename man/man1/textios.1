@@ -13,23 +13,34 @@ systems Icinga and Nagios. It's an interactive tool that spawns
 service problem. \fBcurl\fP(1) is used for downloads and uploads.
 .\" -------------------------------------------------------------------
 .SH OPTIONS
-By default, \fBtextios\fP only shows CRITICALs and UNKNOWNs, it also
-omits soft states. Information for all locations will be shown. You can
-alter that behaviour using the following options.
-.TP
-.B \-w
-Also show WARNINGs.
+By default, \fBtextios\fP only shows CRITICAL and UNKNOWN services, DOWN
+and UNREACHABLE hosts and it also omits soft states. Information for all
+locations will be shown. You can alter that behaviour using the
+following options.
 .TP
 .B \-a
-Show all service states, i.e. OK, WARNING, UNKNOWN, CRITICAL.
+Show \fBeverything\fP, i.e. all filtering turned off.
 .TP
-.B \-s
-Show soft states as well.
+.B \-w
+Includes the state WARNING for services.
 .TP
 .B \-h
-After all other filters have been applied, \fB\-h\fP kicks out
-services and leaves you only with hosts. That is, to show all hosts (and
-not their services), you'll need to use \fB\-ash\fP.
+Only show hosts. That is, to show all hosts (and not their services),
+you'll need to use \fB\-ah\fP. This is useful when scheduling downtimes.
+.TP
+.B \-S
+Show soft states as well.
+.TP
+.B \-A
+Show acknowledged problems as well.
+.TP
+.B \-D
+Show services and hosts in downtimes as well.
+.TP
+.B \-c \fITARGET\fP
+No interactive usage. Instead, copy all internal data to \fITARGET\fP.
+Useful for integration with \fBhtmlios\fP(1). Note: \fITARGET\fP must be
+an absolute path.
 .P
 After these options, you can specify several locations. For example, if
 you've configured the locations \(lqffm\(rq, \(lqber\(rq and
