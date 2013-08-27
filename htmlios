@@ -196,6 +196,9 @@ hoststatusmapping = {
 statusmappinginv = { v: k for k, v in statusmapping.items() }
 
 for l in args.location:
+    if l == 'NONE':
+        continue
+
     try:
         with open('{}/{}/hosts.json'.format(args.input, l), 'r') as fp:
             info_hosts = json.load(fp)
