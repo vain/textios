@@ -208,6 +208,8 @@ for l in args.location:
             info_services = json.load(fp)
     except:
         failed = True
+        info_hosts = {'status': {'host_status': []}}
+        info_services = {'status': {'service_status': []}}
 
     if not 'status' in info_hosts.keys() or not 'status' in info_services.keys():
         failed = True
