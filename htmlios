@@ -55,6 +55,21 @@ html = Template(u"""<!DOCTYPE html>
         background: linear-gradient(to bottom, #7f0000 0%, #300000 100%);
     }
     body.critical div.allokay, body.failed div.allokay { display: none; }
+    @-moz-keyframes fade {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.4 }
+        100% { opacity: 0.03 }
+    }
+    @-webkit-keyframes fade {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.4 }
+        100% { opacity: 0.03 }
+    }
+    @keyframes fade {
+        0% { opacity: 0.03 }
+        50% { opacity: 0.4 }
+        100% { opacity: 0.03 }
+    }
     div.title {
         background-color: rgba(0,0,0, 0.4);
         color: #eeeeee;
@@ -68,21 +83,6 @@ html = Template(u"""<!DOCTYPE html>
         width: 100%;
         border-spacing: 0;
     }
-    @-moz-keyframes smiley {
-        0% { opacity: 0.03 }
-        50% { opacity: 0.3 }
-        100% { opacity: 0.03 }
-    }
-    @-webkit-keyframes smiley {
-        0% { opacity: 0.03 }
-        50% { opacity: 0.3 }
-        100% { opacity: 0.03 }
-    }
-    @keyframes smiley {
-        0% { opacity: 0.03 }
-        50% { opacity: 0.2 }
-        100% { opacity: 0.03 }
-    }
     div.allokay {
         font-size: 700px;
         height: 700px;
@@ -93,12 +93,9 @@ html = Template(u"""<!DOCTYPE html>
         top: 50%;
         width: 100%;
 
-        -webkit-animation-duration: 4s;
-        -moz-animation-duration: 4s;
-        animation-duration: 4s;
-        -webkit-animation-name: smiley;
-        -moz-animation-name: smiley;
-        animation-name: smiley;
+        -webkit-animation: fade 4s;
+        -moz-animation: fade 4s;
+        animation: fade 4s;
     }
     tr { width: 100%; text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.4); }
     tr.soft td {
