@@ -70,6 +70,18 @@ html = Template(u"""<!DOCTYPE html>
         50% { opacity: 0.4 }
         100% { opacity: 0.03 }
     }
+    div.failed-overlay {
+        background-color: #ff0000;
+        display: none;
+        height: 100%;
+        opacity: 0.03;
+        position: fixed;
+        width: 100%;
+        -webkit-animation: fade 5s infinite;
+        -moz-animation: fade 5s infinite;
+        animation: fade 5s infinite;
+    }
+    body.failed div.failed-overlay { display: flex; }
     div.title {
         background-color: rgba(0,0,0, 0.4);
         color: #eeeeee;
@@ -157,6 +169,7 @@ html = Template(u"""<!DOCTYPE html>
     </style>
 </head>
 <body class="ok $bodyclasses">
+    <div class="failed-overlay"></div>
     $title
     <div class="allokay">☺</div>
     <table>
