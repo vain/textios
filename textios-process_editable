@@ -139,3 +139,24 @@ for line in sys.stdin.readlines():
             ret = subprocess.call(curlcmd, stdout=fp)
             if ret != 0:
                 sys.stderr.write('Failed, curl error {}\n'.format(ret))
+
+    # Allowed commands:
+    #  again
+    # Schedules a check for the given services right now.
+    if cmd.lower() == 'again':
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if is_host:
+            print 'rescheduling a host check not supported'
+        else:
+            print 'rescheduling {} on {}'.format(service, host)
+            curlcmd = ['curl', '-nsLk', '--fail', url,
+                       '--data', 'cmd_typ=7',
+                       '--data', 'cmd_mod=2',
+                       '--data', 'host={}'.format(host),
+                       '--data', 'service={}'.format(service),
+                       '--data', 'start_time={}'.format(now),
+                       '--data', 'force_check=1']
+        with open('/dev/null', 'w') as fp:
+            ret = subprocess.call(curlcmd, stdout=fp)
+            if ret != 0:
+                sys.stderr.write('Failed: {}\n'.format(ret))
