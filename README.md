@@ -64,6 +64,23 @@ Configuration
 See `man textiosrc`.
 
 
+Compatibility
+=============
+
+textios and htmlios are developed on Arch Linux. They have the following
+dependencies:
+
+ - awk
+ - bash
+ - curl
+ - python2 (Python 2.7, actually)
+ - vim
+
+Some quick testing on OpenBSD 5.3 has been done, so textios/htmlios
+should work on that system as well. (Probably other BSDs are fine, too,
+but I haven't tried.)
+
+
 Disclaimer
 ==========
 
