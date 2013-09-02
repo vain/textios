@@ -14,27 +14,23 @@ BEGIN {
 }
 
 /^\tstate_type/ {
-	switch ($2) {
-		case 0:
-			state_type = "SOFT"
-			break
-		case 1:
-			state_type = "HARD"
-			break
+	if ($2 == 0) {
+		state_type = "SOFT"
+	}
+	else if ($2 == 1) {
+		state_type = "HARD"
 	}
 }
 
 /^\tcurrent_state/ {
-	switch ($2) {
-		case 0:
-			current_state = "UP"
-			break
-		case 1:
-			current_state = "DOWN"
-			break
-		case 2:
-			current_state = "UNREACHABLE"
-			break
+	if ($2 == 0) {
+		current_state = "UP"
+	}
+	else if ($2 == 1) {
+		current_state = "DOWN"
+	}
+	else if ($2 == 2) {
+		current_state = "UNREACHABLE"
 	}
 }
 
