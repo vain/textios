@@ -60,7 +60,7 @@ do
 	case ${monitors[$((i + 1))]} in
 		icinga)
 			(
-				workdir=$(mktemp -d)
+				workdir=$(mktemp -d -t textios.XXXXXXXXXX)
 				(
 					cd "$workdir"
 					(
@@ -96,7 +96,7 @@ do
 			;;
 		nagios)
 			(
-				workdir=$(mktemp -d)
+				workdir=$(mktemp -d -t textios.XXXXXXXXXX)
 				(
 					cd "$workdir"
 					curl --fail --compressed -nsLk \
