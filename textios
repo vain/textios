@@ -48,7 +48,8 @@ done
 shift $((OPTIND - 1))
 labels=" $1 "
 
-[[ -z $only_copy_to ]] && rm -f /tmp/textios-*
+textios_work=$(mktemp -d -t textios-editable.XXXXXXXXXX)
+trap 'rm -Rf "$textios_work"' EXIT
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
@@ -88,7 +89,7 @@ do
 							"$show_soft" \
 							"$show_acked" \
 							"$show_downtime" \
-							>/tmp/textios-"$suff"
+							>"$textios_work/$suff"
 					fi
 				)
 				rm -Rf "$workdir"
@@ -116,7 +117,7 @@ do
 							"$show_soft" \
 							"$show_acked" \
 							"$show_downtime" \
-							>/tmp/textios-"$suff"
+							>"$textios_work/$suff"
 					fi
 				)
 				rm -Rf "$workdir"
@@ -127,7 +128,7 @@ done
 
 wait
 [[ -n $only_copy_to ]] && exit
-vim -c 'set tw=0 nowrap' -o /tmp/textios-*
+vim -c 'set tw=0 nowrap' -o "$textios_work"/*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
@@ -136,5 +137,5 @@ do
 	printf -v suff '%02d-%s' "$i" "${monitors[$i]}"
 	echo "Processing $suff..."
 	textios-process_editable "${monitors[$((i + 3))]}" \
-		</tmp/textios-"$suff"
+		<"$textios_work/$suff"
 done
