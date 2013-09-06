@@ -6,6 +6,8 @@ then
 	exit 1
 fi
 
+monitors=()
+author=$USER
 . ~/.textiosrc
 
 filters_service='CRITICAL,UNKNOWN'
@@ -136,7 +138,7 @@ do
 		[[ "${labels// ${monitors[$i]} }" == "$labels" ]] && continue
 	printf -v suff '%02d-%s' "$i" "${monitors[$i]}"
 	echo "Processing $suff..."
-	textios-process_editable "${monitors[$((i + 3))]}" \
+	textios-process_editable "$author" "${monitors[$((i + 3))]}" \
 		<"$textios_work/$suff" &
 done
 

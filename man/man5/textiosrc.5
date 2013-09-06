@@ -14,10 +14,9 @@ The file \fI~/.textiosrc\fP \(em a Bash snippet, actually \(em defines
 the URLs to your Icinga and Nagios instances. It is used by
 \fBtextios\fP and \fBhtmlios\fP.
 .P
-It defines exactly one Bash array called \fBmonitors\fP:
-.P
 .nf
 \f(CW
+\&	author='Elliot Spencer'
 \&	monitors=(
 \&		monitorlabel
 \&		type
@@ -34,8 +33,14 @@ It defines exactly one Bash array called \fBmonitors\fP:
 \fP
 .fi
 .P
+\fIauthor\fP is the name which will be used for acknowledgements and
+downtimes. It is NOT the username with which you log in to your
+monitoring systems (this is set in your \fI~/.netrc\fP). Depending on
+your setup, this option might or might not work. If you don't set this
+option, the value of $\fBUSER\fP will be used.
+.P
 As you can see, four consecutive elements belong to one monitoring
-instance.
+instance:
 .TP
 .I monitorlabel
 This can be set to anything, like the name of the location

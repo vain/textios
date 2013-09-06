@@ -5,7 +5,6 @@ import sys
 import re
 import datetime
 import subprocess
-import getpass
 
 def comment_quote(comment):
     if comment.lower() not in ['q', 'quote']:
@@ -16,7 +15,8 @@ def comment_quote(comment):
         except:
             return comment
 
-url = sys.argv[1]
+author = sys.argv[1]
+url = sys.argv[2]
 
 for line in sys.stdin.readlines():
     # Split at nbsp:
@@ -39,7 +39,7 @@ for line in sys.stdin.readlines():
             curlcmd = ['curl', '-nsLk', '--fail', url,
                        '--data', 'cmd_typ=33',
                        '--data', 'cmd_mod=2',
-                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'com_author={}'.format(author),
                        '--data', 'host={}'.format(host),
                        '--data', 'com_data={}'.format(comment),
                        '--data', 'sticky_ack=1',
@@ -50,7 +50,7 @@ for line in sys.stdin.readlines():
             curlcmd = ['curl', '-nsLk', '--fail', url,
                        '--data', 'cmd_typ=34',
                        '--data', 'cmd_mod=2',
-                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'com_author={}'.format(author),
                        '--data', 'host={}'.format(host),
                        '--data', 'service={}'.format(service),
                        '--data', 'com_data={}'.format(comment),
@@ -113,7 +113,7 @@ for line in sys.stdin.readlines():
                        'curl', '-nsLk', '--fail', url,
                        '--data', 'cmd_typ=55',
                        '--data', 'cmd_mod=2',
-                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'com_author={}'.format(author),
                        '--data', 'host={}'.format(host),
                        '--data', 'com_data={}'.format(comment),
                        '--data', 'start_time={}'.format(starttime),
@@ -127,7 +127,7 @@ for line in sys.stdin.readlines():
                        'curl', '-nsLk', '--fail', url,
                        '--data', 'cmd_typ=56',
                        '--data', 'cmd_mod=2',
-                       '--data', 'com_author={}'.format(getpass.getuser()),
+                       '--data', 'com_author={}'.format(author),
                        '--data', 'host={}'.format(host),
                        '--data', 'service={}'.format(service),
                        '--data', 'com_data={}'.format(comment),
