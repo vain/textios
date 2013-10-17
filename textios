@@ -67,13 +67,13 @@ do
 				(
 					cd "$workdir"
 					(
-						curl --fail --compressed -nsLk \
+						curl --max-time 60 --fail --compressed -nsLk \
 							"$url/?style=hostdetail&jsonoutput" \
 							>hosts.json ||
 							echo "Could not fetch hosts: $url" >&2
 					) &
 					(
-						curl --fail --compressed -nsLk \
+						curl --max-time 60 --fail --compressed -nsLk \
 							"$url/?host=all&style=detail&jsonoutput" \
 							>services.json ||
 							echo "Could not fetch services: $url" >&2
@@ -102,7 +102,7 @@ do
 				workdir=$(mktemp -d -t textios.XXXXXXXXXX)
 				(
 					cd "$workdir"
-					curl --fail --compressed -nsLk \
+					curl --max-time 60 --fail --compressed -nsLk \
 						"$url" >status.dat ||
 						echo "Could not fetch status.dat: $url" >&2
 					textios-nagios_to_json_hosts <status.dat >hosts.json

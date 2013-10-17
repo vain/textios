@@ -37,6 +37,7 @@ for line in sys.stdin.readlines():
         if is_host:
             print 'ack host problem on {}: "{}"'.format(host, comment)
             curlcmd = ['curl', '-nsLk', '--fail', url,
+                       '--max-time', '60',
                        '--data', 'cmd_typ=33',
                        '--data', 'cmd_mod=2',
                        '--data', 'com_author={}'.format(author),
@@ -48,6 +49,7 @@ for line in sys.stdin.readlines():
         else:
             print 'ack {} on {}: "{}"'.format(service, host, comment)
             curlcmd = ['curl', '-nsLk', '--fail', url,
+                       '--max-time', '60',
                        '--data', 'cmd_typ=34',
                        '--data', 'cmd_mod=2',
                        '--data', 'com_author={}'.format(author),
@@ -111,6 +113,7 @@ for line in sys.stdin.readlines():
                                                             date, time, comment)
             curlcmd = [
                        'curl', '-nsLk', '--fail', url,
+                       '--max-time', '60',
                        '--data', 'cmd_typ=55',
                        '--data', 'cmd_mod=2',
                        '--data', 'com_author={}'.format(author),
@@ -125,6 +128,7 @@ for line in sys.stdin.readlines():
                                              service, host, date, time, comment)
             curlcmd = [
                        'curl', '-nsLk', '--fail', url,
+                       '--max-time', '60',
                        '--data', 'cmd_typ=56',
                        '--data', 'cmd_mod=2',
                        '--data', 'com_author={}'.format(author),
@@ -150,6 +154,7 @@ for line in sys.stdin.readlines():
         else:
             print 'rescheduling {} on {}'.format(service, host)
             curlcmd = ['curl', '-nsLk', '--fail', url,
+                       '--max-time', '60',
                        '--data', 'cmd_typ=7',
                        '--data', 'cmd_mod=2',
                        '--data', 'host={}'.format(host),
