@@ -1,1 +1,1 @@
-au BufRead,BufNewFile /tmp/textios-* set tw=0 nowrap
+au BufRead,BufNewFile /tmp/textios-editable.* set tw=0 nowrap
