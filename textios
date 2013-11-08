@@ -130,7 +130,7 @@ done
 
 wait
 [[ -n $only_copy_to ]] && exit
-vim -c 'set tw=0 nowrap' -o "$textios_work"/*
+vim -o "$textios_work"/*
 
 for (( i = 0; i < "${#monitors[@]}"; i += 4 ))
 do
