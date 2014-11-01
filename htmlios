@@ -12,6 +12,7 @@ html = Template(u"""<!DOCTYPE html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="refresh" content="10">
+    $head_title
 
     <style type="text/css">
     html {
@@ -170,7 +171,7 @@ html = Template(u"""<!DOCTYPE html>
 </head>
 <body class="ok $bodyclasses">
     <div class="failed-overlay"></div>
-    $title
+    $div_title
     <div class="allokay">☺</div>
     <table>
 $tablerows
@@ -189,7 +190,11 @@ parser.add_argument('-i', '--input', default='/tmp/raw-textios-data')
 parser.add_argument('location', nargs='+')
 args = parser.parse_args()
 
-title = '<div class="title">{}</div>'.format(args.title) if args.title else ''
+if args.title:
+    div_title = '<div class="title">{}</div>'.format(args.title)
+    head_title = '<title>{}</title>'.format(args.title)
+else:
+    div_title = head_title = ''
 
 if args.template:
     try:
@@ -313,7 +318,8 @@ for host, service, numericalstatus, soft, detail, acked in buffered:
 
 complete = html.substitute(
     bodyclasses=u' '.join(bodyclasses),
-    title=title,
+    div_title=div_title,
+    head_title=head_title,
     tablerows=tablerows,
 )
 print complete.encode('UTF-8')
